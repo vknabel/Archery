@@ -27,7 +27,13 @@ Hello World
 ```
 
 ## Installation
-
+{#
+### Homebrew
+```bash
+$ brew tap vknabel/Archery {{repository}}.git
+$ brew install archery
+```
+#}
 
 ### Using Mint
 ```bash
@@ -41,7 +47,7 @@ $ marathon run vknabel/archery
 
 ### Swift Package Manager
 ```bash
-$ git clone https://github.com/vknabel/Archery.git
+$ git clone {{repository}}.git
 $ cd Archery
 $ swift build -c release
 $ cp -f .build/release/archery /usr/local/bin/archery
@@ -52,53 +58,13 @@ Archery can also be embedded within your own CLI using SwiftPM.
 ## Available Arrows
 Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/master/README.md) and feel free to add to add your own arrow here.
 
-### Archery
-[vknabel/ArcheryArrow](https://github.com/vknabel/ArcheryArrow) Runs multiple scripts
+{% for arrow in publicArrows %}### {{arrow.name}}
+[{{arrow.repository}}](https://github.com/{{arrow.repository}}) {{arrow.description}}
 
 #### Use Cases
-* Automate complex actions by reusing small building blocks
-* Combine all steps for a new release into one command
-* Enforce code style and code format in a pre-commit hook
-
-### Bash
-[vknabel/BashArrow](https://github.com/vknabel/BashArrow) Run bash scripts.
-
-#### Use Cases
-* Run any bash script
-* Write custom arrows in other languages using the `"nestedArrow": true`
-* Generate your docs using jazzy
-
-### Beak
-[vknabel/BeakArrow](https://github.com/vknabel/BeakArrow) Run functions inside Swift files.
-
-#### Use Cases
-* Great to keep related programs together
-* Automate your project
-* Write custom arrows in Swift using `"nestedArrow": true`
-
-### Stencil
-[vknabel/StencilArrow](https://github.com/vknabel/StencilArrow) Render your metadata.
-
-#### Use Cases
-* Keep your versions up-to-date
-* Generate your Podfile
-* Create new models or classes
-
-### Marathon
-[vknabel/MarathonArrow](https://github.com/vknabel/MarathonArrow) Run Swift scripts.
-
-#### Use Cases
-* Write arrows that are specific to your project with `"nestedArrow": true`
-* Automate your project
-
-### Mint
-[vknabel/MintArrow](https://github.com/vknabel/MintArrow) Run CLIs written in Swift. Internally used for all arrows.
-
-#### Use Cases
-* Run Swiftlint, SwiftFormat and other scripts
-* Install local dependencies when needed
-
-
+{% for useCase in arrow.useCases %}* {{useCase}}
+{% endfor %}
+{% endfor %}
 
 ## Development Status
 As Archery is still in early development I want every user to know as early as possible what may actually change or break in future. This project uses semantic versioning. Version 1.0.0 will be released when known bugs are fixed, all major features have been implemented and upcoming one can be implemented without breaking changes. Additional requirements are a good documentation and good error messages. Until 1.0 has been reached minor updates may break, but patches will stay patches and hence safe for updates.
@@ -110,8 +76,8 @@ In bigger projects the `Archerfile` may get huge when used regularly. Later it s
 Especially if your `Archerfile` contains descriptions it will get hard to read soon. As a better format we will replace JSON with YAML, which is a superset of JSON and hence won’t break your configs. As the `Archerfile` should not be read directly, this update won’t break arrows.
 
 ## Contributors
-* Valentin Knabel, [@vknabel](https://github.com/vknabel), dev@vknabel.com, [@vknabel](https://twitter.com/vknabel) on Twitter
-
+{% for user in contributors %}* {{user.name}}, [@{{user.github}}](https://github.com/{{user.github}}){% if user.email %}, {{user.email}}{% endif %}{% if user.twitter %}, [@{{user.twitter}}](https://twitter.com/{{user.twitter}}) on Twitter{% endif %}
+{% endfor %}
 
 ## License
 Archery is available under the [MIT](https://github.com/vknabel/archery/master/LICENSE) license.

@@ -6,11 +6,13 @@ import Unbox
 import Wrap
 
 public struct Archery {
-    private let mint: Mint = Mint(path: "./.archery/mint")
-    private let verbose: Bool = false
-    private let archerfileName = "Archerfile"
+    private let archerfileName: String
+    private let mint: Mint
 
-    public init() {}
+    public init(archerfileName: String = "Archerfile", mint: Mint = Mint(path: "./.archery/mint")) {
+        self.archerfileName = archerfileName
+        self.mint = mint
+    }
 
     public func loadArcherfile(from path: Path? = nil) throws -> Archerfile {
         do {
@@ -29,7 +31,7 @@ public struct Archery {
                 prepareMetadata(archerfile.metadata),
                 prepareMetadata(script.metadata),
             ] + arguments,
-            verbose: verbose
+            verbose: arguments.contains("--verbose")
         )
     }
 

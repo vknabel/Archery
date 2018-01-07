@@ -12,7 +12,8 @@ struct InitCommand: Command {
         }
     }
 
-    func createNewArcherfile() throws -> Path {
-        return "Archerfile"
+    func createNewArcherfile(destination: Path = "Archerfile") throws -> Path {
+        try destination.write(archerfileContents(name: Path.current.normalize().absolute().lastComponentWithoutExtension))
+        return destination
     }
 }

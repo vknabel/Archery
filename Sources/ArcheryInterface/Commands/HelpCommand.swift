@@ -1,11 +1,13 @@
 import ArcheryKit
+import Foundation.NSString
 
 struct HelpCommand: Command {
     func run() throws {
         print("Available Commands:\n")
         for command in try subcommands() {
             if let hint = command.hint {
-                print("\t\(command.name)\t\(hint)")
+                let indented = hint.replacingOccurrences(of: "\n", with: "\n\t\t")
+                print("\t\(command.name)\t\(indented)")
             } else {
                 print("\t\(command.name)")
             }
@@ -21,7 +23,7 @@ struct HelpCommand: Command {
                     name: $0.0,
                     hint: $0.1.help
                 )
-            }
+            }.sorted(by: { $0.name < $1.name })
         } catch ArcheryError.noArcherfileFound {
             return [
                 Subcommand(
