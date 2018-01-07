@@ -6,7 +6,7 @@ import Unbox
 import Wrap
 
 public struct Archery {
-    private let mint: Mint = Mint(path: "/usr/local/lib/mint")
+    private let mint: Mint = Mint(path: "./.archery/mint")
     private let verbose: Bool = false
     private let archerfileName = "Archerfile"
 
@@ -34,12 +34,13 @@ public struct Archery {
     }
 
     public func executeScript(named name: String, using archerfile: Archerfile? = nil, with arguments: [String] = []) throws {
-        guard let script = archerfile?.scripts[name] else {
+        let archerfile = try self.loadArcherfile(archerfile)
+        guard let script = archerfile.scripts[name] else {
             throw ArcheryError.undefinedScript(name)
         }
         return try executeScript(
             script,
-            using: try self.loadArcherfile(archerfile),
+            using: archerfile,
             with: arguments
         )
     }
@@ -55,7 +56,7 @@ public struct Archery {
     private func package(for script: Script) -> MintKit.Package {
         return Package(
             repo: script.arrow,
-            version: "master",
+            version: script.version ?? "master",
             name: script.arrow.split(separator: "/").last.map(String.init) ?? script.arrow
         )
     }

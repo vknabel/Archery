@@ -1,0 +1,22 @@
+{
+    "name": "Archery",
+    "version": "0.1.0",
+    "apiLevel": 1,
+    "scripts": {
+        "greet": {
+            "arrow": "vknabel/BashArrow",
+            "command": "echo Hello"
+        },
+        "clean": {
+            "arrow": "vknabel/BashArrow",
+            "command": "rm -rf .archery && swift package clean",
+            "printCommandBeforeExecution": true
+        },
+        "generate:version": {
+            "arrow": "vknabel/StencilArrow",
+            "template": "Version.swift.stencil",
+            "destination": "Sources/ArcheryKit/Version.generated.swift",
+            "searchPaths": ["Scripts"]
+        }
+    }
+}

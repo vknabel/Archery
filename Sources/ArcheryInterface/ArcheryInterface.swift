@@ -11,7 +11,7 @@ public struct ArcheryInterface {
         do {
             try command(for: arguments).run()
         } catch {
-            print("🏹 Failed with: \(error)")
+            print("💥   with: \(error)")
         }
     }
 
