@@ -59,9 +59,9 @@ Archery can also be embedded within your own CLI using SwiftPM.
 Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/master/README.md) and feel free to add to add your own arrow here.
 
 {% for arrow in publicArrows %}### {{arrow.name}}
-[{{arrow.repository}}](https://github.com/{{arrow.repository}}) {{arrow.description}}
-
-#### Use Cases
+[{{arrow.repository}}](https://github.com/{{arrow.repository}}) {{arrow.description}}{% if arrow.project %}
+*Based on [{{arrow.project}}](https://github.com/{{arrow.project}}).*
+{% endif %}
 {% for useCase in arrow.useCases %}* {{useCase}}
 {% endfor %}
 {% endfor %}

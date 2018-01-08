@@ -15,7 +15,7 @@
         {
             "name": "Archery",
             "repository": "vknabel/ArcheryArrow",
-            "description": "Runs multiple scripts",
+            "description": "Runs multiple scripts.",
             "useCases": [
                 "Automate complex actions by reusing small building blocks",
                 "Combine all steps for a new release into one command",
@@ -27,7 +27,6 @@
             "repository": "vknabel/BashArrow",
             "description": "Run bash scripts.",
             "useCases": [
-                "Run any bash script",
                 "Write custom arrows in other languages using the `\"nestedArrow\": true`",
                 "Generate your docs using jazzy"
             ]
