@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html"> Docs</a> (0% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html"> Reference</a>
+        <img id="carat" src="img/carat.png" />
+          Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='archery' class='heading'>🏹 Archery</h1>
+
+<p><em>Archery</em> allows you to declare all your project&rsquo;s metadata and what you can do with it in one single place.</p>
+
+<p>Within Archery all your data is centralized as JSON in one file called <code>Archerfile</code>. The whole content of that file is treated as metadata. Your scripts live within their own section inside the <code>scripts</code> key and are therefore metadata, too.</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SupercoolProject"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"greet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"arrow"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vknabel/BashArrow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"echo Hello"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p><em>Note:</em> All of these keys are optional. The minimal Archerfile is <code>{}</code>.</p>
+</blockquote>
+
+<p>Besides the name and version of the project, this Archerfile declares the <code>greet</code> command. Arrows are Swift scripts or packages that will be downloaded when needed and run using <a href="https://github.com/yonaskolb/Mint">Mint</a>. No matter which arrow you will choose: it comes with all dependencies it needs. The rest is the script config and depends on the chosen arrow. In this case it refers to the <a href="https://github.com/vknabel/BashArrow">vknabel/BashArrow</a> on Github which requires a <code>command</code> beside others.</p>
+<pre class="highlight shell"><code><span class="nv">$ </span>archery greet
+Hello
+<span class="nv">$ </span>archery greet World
+Hello World
+</code></pre>
+<h2 id='installation' class='heading'>Installation</h2>
+<h3 id='using-mint' class='heading'>Using Mint</h3>
+<pre class="highlight shell"><code><span class="nv">$ </span>mint run vknabel/Archery
+</code></pre>
+<h3 id='using-marathon' class='heading'>Using Marathon</h3>
+<pre class="highlight shell"><code><span class="nv">$ </span>marathon run vknabel/archery
+</code></pre>
+<h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
+<pre class="highlight shell"><code><span class="nv">$ </span>git clone https://github.com/vknabel/Archery.git
+<span class="nv">$ </span><span class="nb">cd </span>Archery
+<span class="nv">$ </span>swift build <span class="nt">-c</span> release
+<span class="nv">$ </span><span class="nb">cp</span> <span class="nt">-f</span> .build/release/archery /usr/local/bin/archery
+</code></pre>
+
+<p>Archery can also be embedded within your own CLI using SwiftPM.</p>
+<h2 id='available-arrows' class='heading'>Available Arrows</h2>
+
+<p>Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to <a href="https://github.com/vknabel/ArrowKit/master/README.md">vknabel/ArrowKit</a> and feel free to add to add your own arrow here.</p>
+<h3 id='archery' class='heading'>Archery</h3>
+
+<p><a href="https://github.com/vknabel/ArcheryArrow">vknabel/ArcheryArrow</a> Runs multiple scripts.</p>
+
+<ul>
+<li>Automate complex actions by reusing small building blocks</li>
+<li>Combine all steps for a new release into one command</li>
+<li>Enforce code style and code format in a pre-commit hook</li>
+</ul>
+<h3 id='bash' class='heading'>Bash</h3>
+
+<p><a href="https://github.com/vknabel/BashArrow">vknabel/BashArrow</a> Run bash scripts.</p>
+
+<ul>
+<li>Write custom arrows in other languages using the <code>&quot;nestedArrow&quot;: true</code></li>
+<li>Generate your docs using jazzy</li>
+</ul>
+<h3 id='beak' class='heading'>Beak</h3>
+
+<p><a href="https://github.com/vknabel/BeakArrow">vknabel/BeakArrow</a> Run functions inside Swift files.
+<em>Based on <a href="https://github.com/yonaskolb/Beak">yonaskolb/Beak</a>.</em></p>
+
+<ul>
+<li>Great to keep related programs together</li>
+<li>Automate your project</li>
+<li>Write custom arrows in Swift using <code>&quot;nestedArrow&quot;: true</code></li>
+</ul>
+<h3 id='stencil' class='heading'>Stencil</h3>
+
+<p><a href="https://github.com/vknabel/StencilArrow">vknabel/StencilArrow</a> Render your metadata.
+<em>Based on <a href="https://github.com/kylef/Stencil">kylef/Stencil</a>.</em></p>
+
+<ul>
+<li>Keep your versions up-to-date</li>
+<li>Generate your Podfile</li>
+<li>Create new models or classes</li>
+</ul>
+<h3 id='marathon' class='heading'>Marathon</h3>
+
+<p><a href="https://github.com/vknabel/MarathonArrow">vknabel/MarathonArrow</a> Run Swift scripts.
+<em>Based on <a href="https://github.com/JohnSundell/Marathon">JohnSundell/Marathon</a>.</em></p>
+
+<ul>
+<li>Write arrows that are specific to your project with <code>&quot;nestedArrow&quot;: true</code></li>
+<li>Automate your project</li>
+</ul>
+<h3 id='mint' class='heading'>Mint</h3>
+
+<p><a href="https://github.com/vknabel/MintArrow">vknabel/MintArrow</a> Run CLIs written in Swift. Internally used for all arrows.
+<em>Based on <a href="https://github.com/yonaskolb/Mint">yonaskolb/Mint</a>.</em></p>
+
+<ul>
+<li>Run Swiftlint, SwiftFormat and other scripts</li>
+<li>Install local dependencies when needed</li>
+</ul>
+<h2 id='development-status' class='heading'>Development Status</h2>
+
+<p>As Archery is still in early development I want every user to know as early as possible what may actually change or break in future. This project uses semantic versioning. Version 1.0.0 will be released when known bugs are fixed, all major features have been implemented and upcoming one can be implemented without breaking changes. Additional requirements are a good documentation and good error messages. Until 1.0 has been reached minor updates may break, but patches will stay patches and hence safe for updates.</p>
+<h3 id='archerfile-loaders' class='heading'>Archerfile Loaders</h3>
+
+<p>In bigger projects the <code>Archerfile</code> may get huge when used regularly. Later it shall be possible to extract some JSON values into external files and even other scripts. As the <code>Archerfile</code> should not be read directly, this update won’t break arrows.</p>
+<h3 id='yaml-file-format' class='heading'>YAML file format</h3>
+
+<p>Especially if your <code>Archerfile</code> contains descriptions it will get hard to read soon. As a better format we will replace JSON with YAML, which is a superset of JSON and hence won’t break your configs. As the <code>Archerfile</code> should not be read directly, this update won’t break arrows.</p>
+<h2 id='contributors' class='heading'>Contributors</h2>
+
+<ul>
+<li>Valentin Knabel, <a href="https://github.com/vknabel">@vknabel</a>, <a href="mailto:dev@vknabel.com">dev@vknabel.com</a>, <a href="https://twitter.com/vknabel">@vknabel</a> on Twitter</li>
+</ul>
+<h2 id='license' class='heading'>License</h2>
+
+<p>Archery is available under the <a href="https://github.com/vknabel/archery/master/LICENSE">MIT</a> license.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-08)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

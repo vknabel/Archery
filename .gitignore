@@ -2,5 +2,7 @@
 /.build
 /Packages
 /*.xcodeproj
-/.vscode
+/Package.resolved
 /.archery
+/.vscode
+/build

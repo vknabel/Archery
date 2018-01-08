@@ -100,7 +100,8 @@
                 "readme",
                 "version",
                 "init-command",
-                "format"
+                "format",
+                "docs"
             ],
             "scripts": {
                 "readme": {
@@ -120,6 +121,10 @@
                     "template": "InitCommand+Contents.swift.stencil",
                     "destination": "Sources/ArcheryInterface/InitCommand+Contents.swift",
                     "searchPaths": ["Scripts"]
+                },
+                "docs": {
+                    "arrow": "vknabel/BashArrow",
+                    "command": "if which jazzy >/dev/null; then jazzy; else echo Skip: Jazzy not available; fi"
                 }
             }
         }

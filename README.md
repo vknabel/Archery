@@ -53,7 +53,7 @@ Archery can also be embedded within your own CLI using SwiftPM.
 Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/master/README.md) and feel free to add to add your own arrow here.
 
 ### Archery
-[vknabel/ArcheryArrow](https://github.com/vknabel/ArcheryArrow) Runs multiple scripts
+[vknabel/ArcheryArrow](https://github.com/vknabel/ArcheryArrow) Runs multiple scripts.
 * Automate complex actions by reusing small building blocks
 * Combine all steps for a new release into one command
 * Enforce code style and code format in a pre-commit hook
@@ -65,7 +65,7 @@ Currently the following arrows are known. Feel free to add your own arrows. If y
 
 ### Beak
 [vknabel/BeakArrow](https://github.com/vknabel/BeakArrow) Run functions inside Swift files.
-*Based on [yonaskolb/Beak](https://github.com/yonaskolb/Beak)*
+*Based on [yonaskolb/Beak](https://github.com/yonaskolb/Beak).*
 
 * Great to keep related programs together
 * Automate your project
@@ -73,7 +73,7 @@ Currently the following arrows are known. Feel free to add your own arrows. If y
 
 ### Stencil
 [vknabel/StencilArrow](https://github.com/vknabel/StencilArrow) Render your metadata.
-*Based on [kylef/Stencil](https://github.com/kylef/Stencil)*
+*Based on [kylef/Stencil](https://github.com/kylef/Stencil).*
 
 * Keep your versions up-to-date
 * Generate your Podfile
@@ -81,14 +81,14 @@ Currently the following arrows are known. Feel free to add your own arrows. If y
 
 ### Marathon
 [vknabel/MarathonArrow](https://github.com/vknabel/MarathonArrow) Run Swift scripts.
-*Based on [JohnSundell/Marathon](https://github.com/JohnSundell/Marathon)*
+*Based on [JohnSundell/Marathon](https://github.com/JohnSundell/Marathon).*
 
 * Write arrows that are specific to your project with `"nestedArrow": true`
 * Automate your project
 
 ### Mint
 [vknabel/MintArrow](https://github.com/vknabel/MintArrow) Run CLIs written in Swift. Internally used for all arrows.
-*Based on [yonaskolb/Mint](https://github.com/yonaskolb/Mint)*
+*Based on [yonaskolb/Mint](https://github.com/yonaskolb/Mint).*
 
 * Run Swiftlint, SwiftFormat and other scripts
 * Install local dependencies when needed
