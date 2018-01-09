@@ -2,35 +2,46 @@ import ArcheryKit
 import Foundation.NSString
 
 struct HelpCommand: Command {
+    let prefix = "    "
+    let padding = "  "
     func run() throws {
+        let (archerfile, allSubcommands) = try context()
+        if let help = archerfile.metadata["help"] as? String {
+            print(help + "\n")
+        }
         print("Available Commands:\n")
-        for command in try subcommands() {
+        let maxLength = allSubcommands.map { $0.name.count }
+            .max() ?? 0
+        for command in allSubcommands {
             if let hint = command.hint {
-                let indented = hint.replacingOccurrences(of: "\n", with: "\n\t\t")
-                print("\t\(command.name)\t\(indented)")
+                let fullPadding = String(repeating: " ", count: maxLength) + prefix
+                let additionalPadding = String(repeating: " ", count: maxLength - command.name.count)
+                let indentedHelp = hint.replacingOccurrences(of: "\n", with: "\n" + padding + fullPadding)
+                print(prefix + command.name + padding + additionalPadding + indentedHelp)
             } else {
-                print("\t\(command.name)")
+                print(prefix + command.name)
             }
         }
     }
 
-    func subcommands() throws -> [Subcommand] {
+    func context() throws -> (Archerfile, [Subcommand]) {
         do {
             let archery = Archery()
             let file = try archery.loadArcherfile()
-            return file.scripts.map {
+            return (file, file.scripts.map {
                 Subcommand(
                     name: $0.0,
                     hint: $0.1.help
                 )
             }.sorted(by: { $0.name < $1.name })
+            )
         } catch ArcheryError.noArcherfileFound {
-            return [
+            return (try Archerfile(metadata: [:]), [
                 Subcommand(
                     name: "init",
                     hint: "Creates a new Archerfile"
                 ),
-            ]
+            ])
         }
     }
 

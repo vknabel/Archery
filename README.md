@@ -1,30 +1,55 @@
 # 🏹 Archery
 *Archery* allows you to declare all your project's metadata and what you can do with it in one single place.
 
-Within Archery all your data is centralized as JSON in one file called `Archerfile`. The whole content of that file is treated as metadata. Your scripts live within their own section inside the `scripts` key and are therefore metadata, too.
+Within Archery all your data is centralized as JSON in one file called `Archerfile`. The whole content of that file is treated as metadata. Within `scripts` you declare whatever you want to run.
 
+The following code shows how an Archerfile may look like. Besides the name and version of the project, it declares two scripts:
 ```json
 {
-	"name": "SupercoolProject",
-	"version": "1.0.0",
-	"scripts": {
-		"greet": {
-			"arrow": "vknabel/BashArrow",
-			"command": "echo Hello"
-      }
-  }
+    "name": "YourProject",
+    "help": "Thanks for downloading this project and trying it out.",
+    "version": "1.0.0",
+    "scripts": {
+        "xcproj": {
+            "arrow": "vknabel/BashArrow",
+            "help": "Generate the Xcode Project for the current SPM project",
+            "command": "swift package generate-xcodeproj"
+        },
+        "generate-version": {
+            "arrow": "vknabel/StencilArrow",
+            "help": "Injects the current version into the SPM project",
+            "template": "Version.swift.stencil",
+            "destination": "Sources/ArcheryKit/Version.generated.swift",
+            "searchPaths": ["Scripts"]
+        }
+    }
 }
 ```
-> *Note:* All of these keys are optional. The minimal Archerfile is `{}`.
+* `$ archery xcproj` will use [Mint](https://github.com/yonaskolb/Mint) to load [vknabel/BashArrow](https://github.com/vknabel/BashArrow), which executes a given command. Whenever you want to run simple scripts on the command line which do not require global installs, this is an universal way to go.
+* `$ archery generate-version` is based on [vknabel/StencilArrow](https://github.com/vknabel/StencilArrow). It will pass all contents of the Archerfile to render the contents of `Version.swift.stencil` using the [Stencil](https://github.com/kylef/Stencil) language. Whenever you need information of your Archerfile inside other files, this way should be the most convenient.
 
-Besides the name and version of the project, this Archerfile declares the `greet` command. Arrows are Swift scripts or packages that will be downloaded when needed and run using [Mint](https://github.com/yonaskolb/Mint). No matter which arrow you will choose: it comes with all dependencies it needs. The rest is the script config and depends on the chosen arrow. In this case it refers to the [vknabel/BashArrow](https://github.com/vknabel/BashArrow) on Github which requires a `command` beside others.
+If you are new to a project, Archery will help you to get started as it acts as a project internal CLI. The generated help for the Archerfile can be accessed as below.
 
 ```bash
-$ archery greet
-Hello
-$ archery greet World
-Hello World
+$ archery
+Thanks for downloading this project and trying it out.
+
+Available Commands:
+
+    generate-version  Injects the current version into the SPM project
+    xcproj            Generate the Xcode Project for the current SwiftPM project
 ```
+
+No matter which arrow you will choose for your scripts: it comes with all dependencies it needs. No need for any additional commands.
+
+## Scripts
+The script tag at root level drives the available subcommands and is interpreted as Array of scripts.
+| Option        | Default   | Description               |
+|---------------|-----------|---------------------------|
+| `arrow`       | Required  | Github repository for a Swift CLI. See [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/blob/master/README.md). |
+| `version`     | `master`  | The version that shall be used. Will be cached within `.archery/mint` |
+| `help`        | None      | The description of the script. |
+| `nestedArrow` | `false`   | Treat subcommands as arrow. Allows to write arrows in different languages. See [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/blob/master/README.md). |
 
 ## Installation
 
@@ -50,7 +75,7 @@ $ cp -f .build/release/archery /usr/local/bin/archery
 Archery can also be embedded within your own CLI using SwiftPM.
 
 ## Available Arrows
-Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/master/README.md) and feel free to add to add your own arrow here.
+Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/blob/master/README.md) and feel free to add to add your own arrow here.
 
 ### Archery
 [vknabel/ArcheryArrow](https://github.com/vknabel/ArcheryArrow) Runs multiple scripts.
