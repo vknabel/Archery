@@ -44,6 +44,7 @@ No matter which arrow you will choose for your scripts: it comes with all depend
 
 ## Scripts
 The script tag at root level drives the available subcommands and is interpreted as Array of scripts.
+
 | Option        | Default   | Description               |
 |---------------|-----------|---------------------------|
 | `arrow`       | Required  | Github repository for a Swift CLI. See [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/blob/master/README.md). |

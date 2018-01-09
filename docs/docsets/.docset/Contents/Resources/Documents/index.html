@@ -78,13 +78,36 @@ Available Commands:
 <p>No matter which arrow you will choose for your scripts: it comes with all dependencies it needs. No need for any additional commands.</p>
 <h2 id='scripts' class='heading'>Scripts</h2>
 
-<p>The script tag at root level drives the available subcommands and is interpreted as Array of scripts.
-| Option        | Default   | Description               |
-|&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&ndash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|
-| <code>arrow</code>       | Required  | Github repository for a Swift CLI. See <a href="https://github.com/vknabel/ArrowKit/blob/master/README.md">vknabel/ArrowKit</a>. |
-| <code>version</code>     | <code>master</code>  | The version that shall be used. Will be cached within <code>.archery/mint</code> |
-| <code>help</code>        | None      | The description of the script. |
-| <code>nestedArrow</code> | <code>false</code>   | Treat subcommands as arrow. Allows to write arrows in different languages. See <a href="https://github.com/vknabel/ArrowKit/blob/master/README.md">vknabel/ArrowKit</a>. |</p>
+<p>The script tag at root level drives the available subcommands and is interpreted as Array of scripts.</p>
+
+<table><thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>arrow</code></td>
+<td>Required</td>
+<td>Github repository for a Swift CLI. See <a href="https://github.com/vknabel/ArrowKit/blob/master/README.md">vknabel/ArrowKit</a>.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td><code>master</code></td>
+<td>The version that shall be used. Will be cached within <code>.archery/mint</code></td>
+</tr>
+<tr>
+<td><code>help</code></td>
+<td>None</td>
+<td>The description of the script.</td>
+</tr>
+<tr>
+<td><code>nestedArrow</code></td>
+<td><code>false</code></td>
+<td>Treat subcommands as arrow. Allows to write arrows in different languages. See <a href="https://github.com/vknabel/ArrowKit/blob/master/README.md">vknabel/ArrowKit</a>.</td>
+</tr>
+</tbody></table>
 <h2 id='installation' class='heading'>Installation</h2>
 <h3 id='using-mint' class='heading'>Using Mint</h3>
 <pre class="highlight shell"><code><span class="nv">$ </span>mint run vknabel/Archery
