@@ -52,6 +52,21 @@ The script tag at root level drives the available subcommands and is interpreted
 | `help`        | None      | The description of the script. |
 | `nestedArrow` | `false`   | Treat subcommands as arrow. Allows to write arrows in different languages. See [vknabel/ArrowKit](https://github.com/vknabel/ArrowKit/blob/master/README.md). |
 
+## Getting Started
+
+In order to use Archery within your own project, either create your Archerfile by hand or let Archery create one for you.
+
+```bash
+$ archery init
+🏹  Created at Archerfile
+```
+
+Now you can add all your metadata and scripts. Don't know where to start? Here are some examples for you:
+
+* If you develop a library you could generate your `.podspec`, `Package.swift` and `Cartfile`. All your dependencies would be declared within your Archerfile, the manifests would be generated using [vknabel/StencilArrow](https://github.com/vknabel/StencilArrow).
+* What is your release process? Why not start it using `$ archery release`? As this script will be more complex, the best would be to use [vknabel/ArcheryArrow](https://github.com/vknabel/ArcheryArrow). You can find a more complete list at the [Available Arrows](#available-arrows).
+* What do you need to install or configure in order to get started with your project? You could move some dependencies into arrows or guide the new users through a tutorial. You can find a more complete list at the [Available Arrows](#available-arrows).
+
 ## Installation
 
 
