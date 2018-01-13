@@ -36,29 +36,92 @@
 
 <p><em>Archery</em> allows you to declare all your project&rsquo;s metadata and what you can do with it in one single place.</p>
 
-<p>Within Archery all your data is centralized as JSON in one file called <code>Archerfile</code>. The whole content of that file is treated as metadata. Your scripts live within their own section inside the <code>scripts</code> key and are therefore metadata, too.</p>
+<p>Within Archery all your data is centralized as JSON in one file called <code>Archerfile</code>. The whole content of that file is treated as metadata. Within <code>scripts</code> you declare whatever you want to run.</p>
+
+<p>The following code shows how an Archerfile may look like. Besides the name and version of the project, it declares two scripts:</p>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SupercoolProject"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YourProject"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"help"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Thanks for downloading this project and trying it out."</span><span class="p">,</span><span class="w">
     </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"greet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"xcproj"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
             </span><span class="s2">"arrow"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vknabel/BashArrow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"echo Hello"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+            </span><span class="s2">"help"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Generate the Xcode Project for the current SPM project"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swift package generate-xcodeproj"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"generate-version"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"arrow"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vknabel/StencilArrow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"help"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Injects the current version into the SPM project"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Version.swift.stencil"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"destination"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sources/ArcheryKit/Version.generated.swift"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"searchPaths"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Scripts"</span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<blockquote>
-<p><em>Note:</em> All of these keys are optional. The minimal Archerfile is <code>{}</code>.</p>
-</blockquote>
+<ul>
+<li><code>$ archery xcproj</code> will use <a href="https://github.com/yonaskolb/Mint">Mint</a> to load <a href="https://github.com/vknabel/BashArrow">vknabel/BashArrow</a>, which executes a given command. Whenever you want to run simple scripts on the command line which do not require global installs, this is an universal way to go.</li>
+<li><code>$ archery generate-version</code> is based on <a href="https://github.com/vknabel/StencilArrow">vknabel/StencilArrow</a>. It will pass all contents of the Archerfile to render the contents of <code>Version.swift.stencil</code> using the <a href="https://github.com/kylef/Stencil">Stencil</a> language. Whenever you need information of your Archerfile inside other files, this way should be the most convenient.</li>
+</ul>
 
-<p>Besides the name and version of the project, this Archerfile declares the <code>greet</code> command. Arrows are Swift scripts or packages that will be downloaded when needed and run using <a href="https://github.com/yonaskolb/Mint">Mint</a>. No matter which arrow you will choose: it comes with all dependencies it needs. The rest is the script config and depends on the chosen arrow. In this case it refers to the <a href="https://github.com/vknabel/BashArrow">vknabel/BashArrow</a> on Github which requires a <code>command</code> beside others.</p>
-<pre class="highlight shell"><code><span class="nv">$ </span>archery greet
-Hello
-<span class="nv">$ </span>archery greet World
-Hello World
+<p>If you are new to a project, Archery will help you to get started as it acts as a project internal CLI. The generated help for the Archerfile can be accessed as below.</p>
+<pre class="highlight shell"><code><span class="nv">$ </span>archery
+Thanks <span class="k">for </span>downloading this project and trying it out.
+
+Available Commands:
+
+    generate-version  Injects the current version into the SPM project
+    xcproj            Generate the Xcode Project <span class="k">for </span>the current SwiftPM project
 </code></pre>
+
+<p>No matter which arrow you will choose for your scripts: it comes with all dependencies it needs. No need for any additional commands.</p>
+<h2 id='scripts' class='heading'>Scripts</h2>
+
+<p>The script tag at root level drives the available subcommands and is interpreted as Array of scripts.</p>
+
+<table><thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>arrow</code></td>
+<td>Required</td>
+<td>Github repository for a Swift CLI. See <a href="https://github.com/vknabel/ArrowKit/blob/master/README.md">vknabel/ArrowKit</a>.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td><code>master</code></td>
+<td>The version that shall be used. Will be cached within <code>.archery/mint</code></td>
+</tr>
+<tr>
+<td><code>help</code></td>
+<td>None</td>
+<td>The description of the script.</td>
+</tr>
+<tr>
+<td><code>nestedArrow</code></td>
+<td><code>false</code></td>
+<td>Treat subcommands as arrow. Allows to write arrows in different languages. See <a href="https://github.com/vknabel/ArrowKit/blob/master/README.md">vknabel/ArrowKit</a>.</td>
+</tr>
+</tbody></table>
+<h2 id='getting-started' class='heading'>Getting Started</h2>
+
+<p>In order to use Archery within your own project, either create your Archerfile by hand or let Archery create one for you.</p>
+<pre class="highlight shell"><code><span class="nv">$ </span>archery init
+🏹  Created at Archerfile
+</code></pre>
+
+<p>Now you can add all your metadata and scripts. Don&rsquo;t know where to start? Here are some examples for you:</p>
+
+<ul>
+<li>If you develop a library you could generate your <code>.podspec</code>, <code>Package.swift</code> and <code>Cartfile</code>. All your dependencies would be declared within your Archerfile, the manifests would be generated using <a href="https://github.com/vknabel/StencilArrow">vknabel/StencilArrow</a>.</li>
+<li>What is your release process? Why not start it using <code>$ archery release</code>? As this script will be more complex, the best would be to use <a href="https://github.com/vknabel/ArcheryArrow">vknabel/ArcheryArrow</a>. You can find a more complete list at the <a href="#available-arrows">Available Arrows</a>.</li>
+<li>What do you need to install or configure in order to get started with your project? You could move some dependencies into arrows or guide the new users through a tutorial. You can find a more complete list at the <a href="#available-arrows">Available Arrows</a>.</li>
+</ul>
 <h2 id='installation' class='heading'>Installation</h2>
 <h3 id='using-mint' class='heading'>Using Mint</h3>
 <pre class="highlight shell"><code><span class="nv">$ </span>mint run vknabel/Archery
@@ -76,7 +139,7 @@ Hello World
 <p>Archery can also be embedded within your own CLI using SwiftPM.</p>
 <h2 id='available-arrows' class='heading'>Available Arrows</h2>
 
-<p>Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to <a href="https://github.com/vknabel/ArrowKit/master/README.md">vknabel/ArrowKit</a> and feel free to add to add your own arrow here.</p>
+<p>Currently the following arrows are known. Feel free to add your own arrows. If you want to write your own arrow head over to <a href="https://github.com/vknabel/ArrowKit/blob/master/README.md">vknabel/ArrowKit</a> and feel free to add to add your own arrow here.</p>
 <h3 id='archery' class='heading'>Archery</h3>
 
 <p><a href="https://github.com/vknabel/ArcheryArrow">vknabel/ArcheryArrow</a> Runs multiple scripts.</p>
@@ -153,7 +216,7 @@ Hello World
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-08)</p>
+          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
