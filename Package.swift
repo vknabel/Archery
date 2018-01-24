@@ -52,7 +52,7 @@ let package = Package(
                 "ArcheryKit",
                 "PathKit",
                 "Unbox",
-                "SwiftShell"
+                "SwiftShell",
             ]
         ),
         .testTarget(
