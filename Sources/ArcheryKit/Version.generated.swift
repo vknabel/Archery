@@ -2,7 +2,7 @@
 
 public extension Archery {
     public static var version: String {
-        return "0.1.0"
+        return "0.1.1"
     }
 
     public static var apiLevel: String {
