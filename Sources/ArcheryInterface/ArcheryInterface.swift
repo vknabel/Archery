@@ -1,4 +1,7 @@
 import ArcheryKit
+import Foundation
+import enum SwiftShell.CommandError
+import enum Unbox.UnboxError
 
 public struct ArcheryInterface {
     public let archery: Archery
@@ -7,11 +10,27 @@ public struct ArcheryInterface {
         self.archery = archery
     }
 
-    public func run(arguments: [String]) {
+    public func run(arguments: [String]) -> Never {
         do {
             try command(for: arguments).run()
+            exit(0)
+        } catch let error as ArcheryError {
+            print("💥  \(error)")
+            exit(1)
+        } catch let error as NSError where error.domain == NSCocoaErrorDomain {
+            print("💥  \(error.localizedDescription)")
+            exit(1)
+        } catch let SwiftShell.CommandError.returnedErrorCode(_, exitCode) {
+            exit(Int32(exitCode))
+        } catch let UnboxError.pathError(path, _) {
+            print("💥  \(path)")
+            exit(1)
+        } catch is UnboxError {
+            print("💥  Invalid format for Archerfile")
+            exit(1)
         } catch {
-            print("💥   with: \(error)")
+            print("💥  \(error)")
+            exit(1)
         }
     }
 

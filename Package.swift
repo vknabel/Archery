@@ -22,7 +22,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/JohnSundell/Unbox.git", from: "2.0.0"),
         .package(url: "https://github.com/JohnSundell/Wrap.git", from: "3.0.0"),
-        .package(url: "https://github.com/yonaskolb/Mint.git", .branch("master")),
+        .package(url: "https://github.com/yonaskolb/Mint.git", from: "0.7.1"),
+        .package(url: "https://github.com/kareman/SwiftShell.git", from: "4.0.0"),
         .package(url: "https://github.com/kylef/PathKit.git", from: "0.8.0"),
     ],
     targets: [
@@ -50,6 +51,8 @@ let package = Package(
             dependencies: [
                 "ArcheryKit",
                 "PathKit",
+                "Unbox",
+                "SwiftShell"
             ]
         ),
         .testTarget(
