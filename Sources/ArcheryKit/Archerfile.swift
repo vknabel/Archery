@@ -7,8 +7,13 @@ public struct Archerfile: Unboxable {
 
     public init(unboxer: Unboxer) throws {
         metadata = unboxer.dictionary
-        let scriptDictionaries = try? unboxer.unbox(key: "scripts") as [String: Any]
-        scripts = try (scriptDictionaries ?? [:]).mapValues { value in
+        let scriptDictionaries: [String: Any]
+        if metadata["scripts"] == nil {
+            scriptDictionaries = [:]
+        } else {
+            scriptDictionaries = try unboxer.unbox(key: "scripts")
+        }
+        scripts = try scriptDictionaries.mapValues { value in
             if let value = value as? String {
                 return Script(arrow: value)
             } else if let value = value as? [String: Any] {

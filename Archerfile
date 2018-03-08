@@ -94,6 +94,11 @@
             "comment": "Requires https://github.com/nicklockwood/SwiftFormat/pull/183",
             "command": "swiftformat ."
         },
+        "lint": {
+            "arrow": "vknabel/MintArrow",
+            "help": "Lints all project files",
+            "package": "Realm/Swiftlint"
+        },
         "generate": {
             "arrow": "vknabel/ArcheryArrow",
             "run": [

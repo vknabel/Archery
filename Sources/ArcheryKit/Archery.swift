@@ -18,7 +18,9 @@ public struct Archery {
         do {
             let plainArcherfile = try unbox(data: try (path ?? Path(self.archerfileName)).read() as Data) as Archerfile
             return plainArcherfile
-        } catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == NSFileReadNoSuchFileError {
+        } catch let error as NSError
+            where error.domain == NSCocoaErrorDomain
+            && error.code == NSFileReadNoSuchFileError {
             throw ArcheryError.noArcherfileFound
         }
     }
@@ -35,7 +37,11 @@ public struct Archery {
         )
     }
 
-    public func executeScript(named name: String, using archerfile: Archerfile? = nil, with arguments: [String] = []) throws {
+    public func executeScript(
+        named name: String,
+        using archerfile: Archerfile? = nil,
+        with arguments: [String] = []
+    ) throws {
         let archerfile = try self.loadArcherfile(archerfile)
         guard let script = archerfile.scripts[name] else {
             throw ArcheryError.undefinedScript(name)
