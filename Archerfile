@@ -86,7 +86,7 @@
         },
         "xcopen": {
             "arrow": "vknabel/BashArrow",
-            "command": "swift package generate-xcodeproj && open *.xcodeproj"
+            "command": "swift package generate-xcodeproj --enable-code-coverage && open *.xcodeproj"
         },
         "format": {
             "arrow": "vknabel/BashArrow",
@@ -105,6 +105,7 @@
                 "readme",
                 "version",
                 "init-command",
+                "linux-main",
                 "format",
                 "docs"
             ],
@@ -130,6 +131,16 @@
                 "docs": {
                     "arrow": "vknabel/BashArrow",
                     "command": "if which jazzy >/dev/null; then jazzy; else echo Skip: Jazzy not available; fi"
+                },
+                "linux-main": {
+                    "arrow": "vknabel/MintArrow",
+                    "package": "krzysztofzablocki/Sourcery",
+                    "packageVersion": "0.10.1",
+                    "arguments": [
+                        "--sources", "Tests/",
+                        "--templates", "Scripts/LinuxMain.swift.stencil",
+                        "--args", "testimports='@testable import ArcheryKitTests\n@testable import ArcheryInterfaceTests'"
+                    ]
                 }
             }
         }

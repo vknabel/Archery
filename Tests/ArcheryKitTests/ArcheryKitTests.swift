@@ -8,8 +8,4 @@ class ArcheryKitTests: XCTestCase {
         // results.
         // XCTAssertEqual(Archery().text, "Hello, World!")
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }

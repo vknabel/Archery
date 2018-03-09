@@ -79,7 +79,7 @@ class ScriptParsingTests: XCTestCase {
         XCTAssertEqual(sut.version, "1.0.0")
         XCTAssertEqual(sut.help, "My Help")
         XCTAssertEqual(sut.nestedArrow, true)
-        XCTAssertEqual(sut.metadata.count, 4)
+        XCTAssertEqual(sut.metadata.count, 5)
         XCTAssertEqual(sut.metadata["arrow"] as? String, sut.arrow)
         XCTAssertEqual(sut.metadata["version"] as? String, sut.version)
         XCTAssertEqual(sut.metadata["help"] as? String, sut.help)
