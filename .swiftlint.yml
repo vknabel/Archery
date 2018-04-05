@@ -1,0 +1,7 @@
+included:
+    - Sources
+    - Package.swift
+    - Tests
+    - Scripts
+disabled_rules:
+    - trailing_comma

@@ -1,5 +1,4 @@
-import struct Foundation.Data
-import Foundation.NSError
+import Foundation
 import MintKit
 import PathKit
 import Unbox
@@ -16,9 +15,12 @@ public struct Archery {
 
     public func loadArcherfile(from path: Path? = nil) throws -> Archerfile {
         do {
-            let plainArcherfile = try unbox(data: try (path ?? Path(self.archerfileName)).read() as Data) as Archerfile
+            let archerfileContents = try (path ?? Path(archerfileName)).read() as String
+            let plainArcherfile = try Archerfile(string: archerfileContents)
             return plainArcherfile
-        } catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == NSFileReadNoSuchFileError {
+        } catch let error as NSError
+            where error.domain == NSCocoaErrorDomain
+            && error.code == NSFileReadNoSuchFileError {
             throw ArcheryError.noArcherfileFound
         }
     }
@@ -35,8 +37,12 @@ public struct Archery {
         )
     }
 
-    public func executeScript(named name: String, using archerfile: Archerfile? = nil, with arguments: [String] = []) throws {
-        let archerfile = try self.loadArcherfile(archerfile)
+    public func executeScript(
+        named name: String,
+        using archerfile: Archerfile? = nil,
+        with arguments: [String] = []
+    ) throws {
+        let archerfile = try loadArcherfile(archerfile)
         guard let script = archerfile.scripts[name] else {
             throw ArcheryError.undefinedScript(name)
         }
