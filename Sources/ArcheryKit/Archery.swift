@@ -16,7 +16,8 @@ public struct Archery {
 
     public func loadArcherfile(from path: Path? = nil) throws -> Archerfile {
         do {
-            let plainArcherfile = try unbox(data: try (path ?? Path(self.archerfileName)).read() as Data) as Archerfile
+            let archerfileContents = try (path ?? Path(self.archerfileName)).read() as String
+            let plainArcherfile = try Archerfile(string: archerfileContents)
             return plainArcherfile
         } catch let error as NSError
             where error.domain == NSCocoaErrorDomain

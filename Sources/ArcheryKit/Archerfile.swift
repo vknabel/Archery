@@ -25,12 +25,17 @@ public struct Archerfile: Unboxable {
     }
 }
 
+import Yams
+
 public extension Archerfile {
     public init(metadata: UnboxableDictionary) throws {
         try self.init(unboxer: Unboxer(dictionary: metadata))
     }
 
-    public init(data: Data) throws {
-        try self.init(unboxer: Unboxer(data: data))
+    public init(string: String) throws {
+        guard let metadata = try Yams.load(yaml: string) as? UnboxableDictionary else {
+            throw ArcheryError.invalidContentsOfArcherfile
+        }
+        try self.init(metadata: metadata)
     }
 }

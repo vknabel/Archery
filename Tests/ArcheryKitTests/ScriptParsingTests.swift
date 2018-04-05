@@ -10,7 +10,6 @@ import class Unbox.Unboxer
 import XCTest
 
 class ScriptParsingTests: XCTestCase {
-
     private func parseScript(from metadata: [String: Any]) throws -> Script {
         let sut = try Script(unboxer: Unboxer(dictionary: metadata))
         let serializationOptions = [.prettyPrinted] as JSONSerialization.WritingOptions

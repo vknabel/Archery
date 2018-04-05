@@ -1,29 +1,25 @@
 # 🏹 Archery
 *Archery* allows you to declare all your project's metadata and what you can do with it in one single place.
 
-Within Archery all your data is centralized as JSON in one file called `Archerfile`. The whole content of that file is treated as metadata. Within `scripts` you declare whatever you want to run.
+Within Archery all your data is centralized as YAML in one file called `Archerfile`, which will be passed to arrows as JSON. The whole content of that file is treated as metadata. Within `scripts` you declare whatever you want to run.
 
 The following code shows how an Archerfile may look like. Besides the name and version of the project, it declares two scripts:
-```json
-{
-    "name": "YourProject",
-    "help": "Thanks for downloading this project and trying it out.",
-    "version": "1.0.0",
-    "scripts": {
-        "xcproj": {
-            "arrow": "vknabel/BashArrow",
-            "help": "Generate the Xcode Project for the current SPM project",
-            "command": "swift package generate-xcodeproj"
-        },
-        "generate-version": {
-            "arrow": "vknabel/StencilArrow",
-            "help": "Injects the current version into the SPM project",
-            "template": "Version.swift.stencil",
-            "destination": "Sources/ArcheryKit/Version.generated.swift",
-            "searchPaths": ["Scripts"]
-        }
-    }
-}
+```yaml
+name: YourProject
+help: Thanks for downloading this project and trying it out.
+version: 1.0.0
+scripts:
+  xcproj:
+    arrow: vknabel/BashArrow
+    help: Generate the Xcode Project for the current SPM project
+    command: swift package generate-xcodeproj
+  generate-version:
+    arrow: vknabel/StencilArrow
+    help: Injects the current version into the SPM project
+    template: Version.swift.stencil
+    destination: Sources/ArcheryKit/Version.generated.swift
+    searchPaths: [Scripts]
+
 ```
 * `$ archery xcproj` will use [Mint](https://github.com/yonaskolb/Mint) to load [vknabel/BashArrow](https://github.com/vknabel/BashArrow), which executes a given command. Whenever you want to run simple scripts on the command line which do not require global installs, this is an universal way to go.
 * `$ archery generate-version` is based on [vknabel/StencilArrow](https://github.com/vknabel/StencilArrow). It will pass all contents of the Archerfile to render the contents of `Version.swift.stencil` using the [Stencil](https://github.com/kylef/Stencil) language. Whenever you need information of your Archerfile inside other files, this way should be the most convenient.
@@ -112,9 +108,6 @@ As Archery is still in early development I want every user to know as early as p
 
 ### Archerfile Loaders
 In bigger projects the `Archerfile` may get huge when used regularly. Later it shall be possible to extract some JSON values into external files and even other scripts. As the `Archerfile` should not be read directly, this update won’t break arrows.
-
-### YAML file format
-Especially if your `Archerfile` contains descriptions it will get hard to read soon. As a better format we will replace JSON with YAML, which is a superset of JSON and hence won’t break your configs. As the `Archerfile` should not be read directly, this update won’t break arrows.
 
 ## Contributors
 {% for user in contributors %}* {{user.name}}, [@{{user.github}}](https://github.com/{{user.github}}){% if user.email %}, {{user.email}}{% endif %}{% if user.twitter %}, [@{{user.twitter}}](https://twitter.com/{{user.twitter}}) on Twitter{% endif %}
