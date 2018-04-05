@@ -103,8 +103,12 @@ scripts:
         - Scripts
       docs:
         arrow: vknabel/BashArrow
-        command: 'if which jazzy >/dev/null; then jazzy; else echo Skip: Jazzy not
-          available; fi'
+        command: |
+          if which jazzy >/dev/null; then
+            jazzy
+          else
+            echo Skip: Jazzy not available
+          fi
       linux-main:
         arrow: vknabel/MintArrow
         package: krzysztofzablocki/Sourcery
