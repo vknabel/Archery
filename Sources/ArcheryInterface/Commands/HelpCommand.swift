@@ -1,5 +1,4 @@
 import ArcheryKit
-import Foundation.NSString
 
 struct HelpCommand: Command {
     let prefix = "    "

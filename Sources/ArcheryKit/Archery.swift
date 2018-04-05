@@ -15,7 +15,7 @@ public struct Archery {
 
     public func loadArcherfile(from path: Path? = nil) throws -> Archerfile {
         do {
-            let archerfileContents = try (path ?? Path(self.archerfileName)).read() as String
+            let archerfileContents = try (path ?? Path(archerfileName)).read() as String
             let plainArcherfile = try Archerfile(string: archerfileContents)
             return plainArcherfile
         } catch let error as NSError
@@ -42,7 +42,7 @@ public struct Archery {
         using archerfile: Archerfile? = nil,
         with arguments: [String] = []
     ) throws {
-        let archerfile = try self.loadArcherfile(archerfile)
+        let archerfile = try loadArcherfile(archerfile)
         guard let script = archerfile.scripts[name] else {
             throw ArcheryError.undefinedScript(name)
         }
