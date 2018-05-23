@@ -1,4 +1,7 @@
 # 🏹 Archery
+
+[![Join the chat at https://gitter.im/vknabel-Archery/Lobby](https://badges.gitter.im/vknabel-Archery/Lobby.svg)](https://gitter.im/vknabel-Archery/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 *Archery* allows you to declare all your project's metadata and what you can do with it in one single place.
 
 Within Archery all your data is centralized as YAML in one file called `Archerfile`, which will be passed to arrows as JSON. The whole content of that file is treated as metadata. Within `scripts` you declare whatever you want to run.
