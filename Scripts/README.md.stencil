@@ -9,10 +9,7 @@ name: YourProject
 help: Thanks for downloading this project and trying it out.
 version: 1.0.0
 scripts:
-  xcproj:
-    arrow: vknabel/BashArrow
-    help: Generate the Xcode Project for the current SPM project
-    command: swift package generate-xcodeproj
+  xcproj: swift package generate-xcodeproj
   generate-version:
     arrow: vknabel/StencilArrow
     help: Injects the current version into the SPM project
