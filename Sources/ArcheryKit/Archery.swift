@@ -8,7 +8,10 @@ public struct Archery {
     private let archerfileName: String
     private let mint: Mint
 
-    public init(archerfileName: String = "Archerfile", mint: Mint = Mint(path: "./.archery/mint")) {
+    public init(archerfileName: String = "Archerfile", mint: Mint = Mint(
+        path: "./.archery/mint",
+        installationPath: "./.archery/bin"
+    )) {
         self.archerfileName = archerfileName
         self.mint = mint
     }

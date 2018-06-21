@@ -15,7 +15,14 @@ public struct Archerfile: Unboxable {
         }
         scripts = try scriptDictionaries.mapValues { value in
             if let value = value as? String {
-                return Script(arrow: value)
+                if !value.contains(" ") && !value.starts(with: ".") && value.split(separator: "/").count == 2 {
+                    return Script(arrow: value)
+                } else {
+                    return try Script(unboxer: Unboxer(dictionary: [
+                        "arrow": "vknabel/BashArrow",
+                        "command": value
+                    ]))
+                }
             } else if let value = value as? [String: Any] {
                 return try Script(unboxer: Unboxer(dictionary: value))
             } else {

@@ -52,9 +52,7 @@ publicArrows:
   - Run Swiftlint, SwiftFormat and other scripts
   - Install local dependencies when needed
 scripts:
-  greet:
-    arrow: vknabel/BashArrow
-    command: echo Hello
+  greet: echo Hello
   clean:
     arrow: vknabel/BashArrow
     command: rm -rf .archery && swift package clean
@@ -101,9 +99,7 @@ scripts:
         destination: Sources/ArcheryInterface/InitCommand+Contents.swift
         searchPaths:
         - Scripts
-      docs:
-        arrow: vknabel/BashArrow
-        command: |
+      docs: |
           if which jazzy >/dev/null; then
             jazzy
           else
