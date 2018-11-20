@@ -1,5 +1,5 @@
 import Foundation
-import MintKit
+import MintKitShim
 import PathKit
 import Unbox
 import Wrap

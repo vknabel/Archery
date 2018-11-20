@@ -22,8 +22,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/JohnSundell/Unbox.git", from: "3.0.0"),
         .package(url: "https://github.com/JohnSundell/Wrap.git", from: "3.0.1"),
-        .package(url: "https://github.com/yonaskolb/Mint.git", from: "0.10.1"),
-        .package(url: "https://github.com/kareman/SwiftShell.git", from: "4.1.0"),
+        .package(url: "https://github.com/jakeheis/SwiftCLI.git", from: "5.2.1"),
         .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.1"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "1.0.0"),
     ],
@@ -37,11 +36,11 @@ let package = Package(
         .target(
             name: "ArcheryKit",
             dependencies: [
-                "MintKit",
                 "PathKit",
                 "Unbox",
                 "Wrap",
                 "Yams",
+                "MintKitShim",
             ]
         ),
         .testTarget(
@@ -54,7 +53,13 @@ let package = Package(
                 "ArcheryKit",
                 "PathKit",
                 "Unbox",
-                "SwiftShell",
+            ]
+        ),
+        .target(
+            name: "MintKitShim",
+            dependencies: [
+                "PathKit",
+                "SwiftCLI",
             ]
         ),
         .testTarget(

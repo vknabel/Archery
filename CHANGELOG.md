@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+* Mint will not be bundled with Archery anymore. Instead always your global version will be used.
+
 ## 0.2.1
 
 * Bumped internal dependencies

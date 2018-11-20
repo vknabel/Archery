@@ -20,7 +20,7 @@ public struct Archerfile: Unboxable {
                 } else {
                     return try Script(unboxer: Unboxer(dictionary: [
                         "arrow": "vknabel/BashArrow",
-                        "command": value
+                        "command": value,
                     ]))
                 }
             } else if let value = value as? [String: Any] {

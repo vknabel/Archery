@@ -1,6 +1,6 @@
 import ArcheryKit
 import Foundation
-import enum SwiftShell.CommandError
+import protocol SwiftCLI.ProcessError
 import enum Unbox.UnboxError
 
 public struct ArcheryInterface {
@@ -20,8 +20,8 @@ public struct ArcheryInterface {
         } catch let error as NSError where error.domain == NSCocoaErrorDomain {
             print("💥  \(error.localizedDescription)")
             exit(1)
-        } catch let SwiftShell.CommandError.returnedErrorCode(_, exitCode) {
-            exit(Int32(exitCode))
+        } catch let error as ProcessError {
+            exit(Int32(error.exitStatus))
         } catch let UnboxError.pathError(path, _) {
             print("💥  \(path)")
             exit(1)
