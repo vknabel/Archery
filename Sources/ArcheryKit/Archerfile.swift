@@ -1,48 +1,73 @@
-import struct Foundation.Data
-import Unbox
+import Foundation
 
-public struct Archerfile: Unboxable {
+public typealias Archerfile = Annotated<ArcherfileConvenienceData>
+
+public struct ArcherfileConvenienceData: Codable {
     public let scripts: [String: Script]
-    public let metadata: UnboxableDictionary
+    public var loaders: [Loader]
+}
 
-    public init(unboxer: Unboxer) throws {
-        metadata = unboxer.dictionary
-        let scriptDictionaries: [String: Any]
-        if metadata["scripts"] == nil {
-            scriptDictionaries = [:]
+public extension ArcherfileConvenienceData {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: ArcherfileCodingKey.self)
+        if container.contains(.scripts) {
+            scripts = try container.decode([String: Script].self, forKey: .scripts)
         } else {
-            scriptDictionaries = try unboxer.unbox(key: "scripts")
+            scripts = [:]
         }
-        scripts = try scriptDictionaries.mapValues { value in
-            if let value = value as? String {
-                if !value.contains(" ") && !value.starts(with: ".") && value.split(separator: "/").count == 2 {
-                    return Script(arrow: value)
-                } else {
-                    return try Script(unboxer: Unboxer(dictionary: [
-                        "arrow": "vknabel/BashArrow",
-                        "command": value,
-                    ]))
-                }
-            } else if let value = value as? [String: Any] {
-                return try Script(unboxer: Unboxer(dictionary: value))
-            } else {
-                throw ArcheryError.invalidScriptDefinition(value)
-            }
+        if container.contains(.loaders) {
+            loaders = try container.decode([Loader].self, forKey: .loaders)
+        } else {
+            loaders = []
         }
+    }
+
+    private enum ArcherfileCodingKey: String, CodingKey {
+        case scripts, loaders
+    }
+}
+
+extension Annotated where V == ArcherfileConvenienceData {
+    internal func loading(_ additions: Metadata) throws -> Archerfile {
+        return try Archerfile(metadata: metadata.overriding(using: additions))
+    }
+
+    public init(metadata: Metadata) throws {
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        let archerfile = try decoder.decode(V.self, from: encoder.encode(metadata))
+        self.init(value: archerfile, by: metadata)
     }
 }
 
 import Yams
 
-public extension Archerfile {
-    public init(metadata: UnboxableDictionary) throws {
-        try self.init(unboxer: Unboxer(dictionary: metadata))
+public extension Annotated where V == ArcherfileConvenienceData {
+    public init(string: String) throws {
+        self = try Yams.YAMLDecoder().decode(Archerfile.self, from: string)
     }
 
-    public init(string: String) throws {
-        guard let metadata = try Yams.load(yaml: string) as? UnboxableDictionary else {
-            throw ArcheryError.invalidContentsOfArcherfile
+    public var scripts: [String: Script] {
+        return value.scripts
+    }
+
+    public var loaders: [Loader] {
+        return value.loaders
+    }
+
+    internal func dropFirstLoader() -> Annotated {
+        let newLoaders = Array(loaders.dropFirst())
+        let newMetadata: Metadata
+        if case var .dictionary(dict) = metadata, case let .array(metaLoaders)? = dict["loaders"] {
+            dict["loaders"] = .array(Array(metaLoaders.dropFirst()))
+            newMetadata = .dictionary(dict)
+        } else {
+            newMetadata = metadata
         }
-        try self.init(metadata: metadata)
+        let newArcherfile = ArcherfileConvenienceData(
+            scripts: value.scripts,
+            loaders: newLoaders
+        )
+        return Annotated(value: newArcherfile, by: newMetadata)
     }
 }

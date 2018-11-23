@@ -17,6 +17,16 @@ public final class Mint {
             directory: nil
         )
     }
+
+    public func capture(_ package: Package, arguments: [String], verbose: Bool, silent: Bool = false) throws -> CaptureResult {
+        let silence = silent ? ["--silent"] : []
+        let verbosity = verbose ? ["--verbose"] : []
+        return try SwiftCLI.capture(
+            "mint",
+            arguments: ["run"] + silence + verbosity + ["\(package.repo)@\(package.version)", package.name] + arguments,
+            directory: nil
+        )
+    }
 }
 
 public struct Package {

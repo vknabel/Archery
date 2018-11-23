@@ -1,7 +1,6 @@
 import ArcheryKit
 import Foundation
 import protocol SwiftCLI.ProcessError
-import enum Unbox.UnboxError
 
 public struct ArcheryInterface {
     public let archery: Archery
@@ -14,6 +13,9 @@ public struct ArcheryInterface {
         do {
             try command(for: arguments).run()
             exit(0)
+        } catch let error as DecodingError {
+            print("💥  Invalid format for Archerfile: \(error)")
+            exit(1)
         } catch let error as ArcheryError {
             print("💥  \(error)")
             exit(1)
@@ -22,12 +24,6 @@ public struct ArcheryInterface {
             exit(1)
         } catch let error as ProcessError {
             exit(Int32(error.exitStatus))
-        } catch let UnboxError.pathError(path, _) {
-            print("💥  \(path)")
-            exit(1)
-        } catch is UnboxError {
-            print("💥  Invalid format for Archerfile")
-            exit(1)
         } catch {
             print("💥  \(error)")
             exit(1)

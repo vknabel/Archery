@@ -5,7 +5,7 @@ struct HelpCommand: Command {
     let padding = "  "
     func run() throws {
         let (archerfile, allSubcommands) = try context()
-        if let help = archerfile.metadata["help"] as? String {
+        if let help = archerfile.metadata["help"]?.asJSON() as? String {
             print(help + "\n")
         }
         print("Available Commands:\n")
@@ -27,14 +27,14 @@ struct HelpCommand: Command {
         do {
             let archery = Archery()
             let file = try archery.loadArcherfile()
-            return (file, file.scripts.map {
+            return (file, file.value.scripts.map {
                 Subcommand(
                     name: $0.0,
-                    hint: $0.1.help
+                    hint: $0.1.value.help
                 )
             }.sorted(by: { $0.name < $1.name }))
         } catch ArcheryError.noArcherfileFound {
-            return (try Archerfile(metadata: [:]), [
+            return (try Archerfile(metadata: .dictionary([:])), [
                 Subcommand(
                     name: "init",
                     hint: "Creates a new Archerfile"

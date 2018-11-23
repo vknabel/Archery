@@ -6,16 +6,15 @@
 //
 
 @testable import ArcheryKit
-import Unbox
 import XCTest
 
 class ArcherfileParsing: XCTestCase {
     private func parseArcherfile(from metadata: [String: Any]) throws -> Archerfile {
-        let sut = try Archerfile(unboxer: Unboxer(dictionary: metadata))
+        let sut = try Archerfile(metadata: Metadata(json: metadata))
         let serializationOptions = [.prettyPrinted] as JSONSerialization.WritingOptions
         XCTAssertEqual(
-            try? JSONSerialization.data(withJSONObject: sut.metadata, options: serializationOptions),
-            try? JSONSerialization.data(withJSONObject: metadata, options: serializationOptions),
+            try? String(data: JSONSerialization.data(withJSONObject: sut.metadata.asJSON()!, options: serializationOptions), encoding: .utf8),
+            try? String(data: JSONSerialization.data(withJSONObject: metadata, options: serializationOptions), encoding: .utf8),
             "Metadata does not loose data"
         )
         return sut
@@ -23,7 +22,7 @@ class ArcherfileParsing: XCTestCase {
 
     func testArcherfileParsingFromMinimalFile() throws {
         let sut = try parseArcherfile(from: [:])
-        XCTAssertEqual(sut.scripts.count, 0)
+        XCTAssertEqual(sut.value.scripts.count, 0)
     }
 
     func testArcherfileParsingFromEmptyScripts() throws {
@@ -77,5 +76,28 @@ class ArcherfileParsing: XCTestCase {
         ])
         XCTAssertEqual(sut.scripts["some"]?.arrow, "my/Arrow")
         XCTAssertEqual(sut.scripts["other"]?.arrow, "your/Arrow")
+    }
+
+    func testArcherfileParsingFromSomeLoadersAndShorthand() throws {
+        let sut = try parseArcherfile(from: [
+            "loaders": [
+                [
+                    "arrow": "my/Arrow",
+                ],
+                "your/Arrow",
+            ],
+        ])
+        XCTAssertEqual(sut.loaders[0].arrow, "my/Arrow")
+        XCTAssertEqual(sut.loaders[1].arrow, "your/Arrow")
+    }
+
+    func testArcherfileParsingFromSomeLoadersAndBashShorthand() throws {
+        let sut = try parseArcherfile(from: [
+            "loaders": [
+                "cat Metadata/*.yml",
+            ],
+        ])
+        XCTAssertEqual(sut.loaders[0].arrow, "vknabel/BashArrow")
+        XCTAssertEqual(sut.loaders[0].command, "cat Metadata/*.yml")
     }
 }

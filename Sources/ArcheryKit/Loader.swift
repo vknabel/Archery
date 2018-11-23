@@ -1,0 +1,1 @@
+public typealias Loader = Script

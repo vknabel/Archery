@@ -1,8 +1,7 @@
 import Foundation
 import MintKitShim
 import PathKit
-import Unbox
-import Wrap
+import SwiftCLI
 
 public struct Archery {
     private let archerfileName: String
@@ -19,7 +18,8 @@ public struct Archery {
     public func loadArcherfile(from path: Path? = nil) throws -> Archerfile {
         do {
             let archerfileContents = try (path ?? Path(archerfileName)).read() as String
-            let plainArcherfile = try Archerfile(string: archerfileContents)
+            var plainArcherfile = try Archerfile(string: archerfileContents)
+            try applyAllArcherfileLoaders(&plainArcherfile)
             return plainArcherfile
         } catch let error as NSError
             where error.domain == NSCocoaErrorDomain
@@ -45,8 +45,8 @@ public struct Archery {
         using archerfile: Archerfile? = nil,
         with arguments: [String] = []
     ) throws {
-        let archerfile = try loadArcherfile(archerfile)
-        guard let script = archerfile.scripts[name] else {
+        let archerfile = try loadArcherfile(archerfile, with: arguments)
+        guard let script = archerfile.value.scripts[name] else {
             throw ArcheryError.undefinedScript(name)
         }
         return try executeScript(
@@ -56,7 +56,31 @@ public struct Archery {
         )
     }
 
-    private func loadArcherfile(_ archerfile: Archerfile?) throws -> Archerfile {
+    private func applyAllArcherfileLoaders(_ archerfile: inout Archerfile) throws {
+        if let loader = archerfile.loaders.first {
+            var newFile = archerfile.dropFirstLoader()
+            try applyArcherfileLoader(loader, using: &newFile)
+            archerfile = newFile
+            try applyAllArcherfileLoaders(&archerfile)
+        }
+    }
+
+    private func applyArcherfileLoader(_ loader: Loader, using archerfile: inout Archerfile) throws {
+        let result = try mint.capture(
+            package(for: loader),
+            arguments: [
+                Archery.apiLevel,
+                prepareMetadata(archerfile.metadata),
+                prepareMetadata(loader.metadata),
+            ],
+            verbose: false,
+            silent: true
+        )
+        let additions = try Metadata(string: result.stdout)
+        archerfile = try archerfile.loading(additions)
+    }
+
+    private func loadArcherfile(_ archerfile: Archerfile?, with _: [String]) throws -> Archerfile {
         if let archerfile = archerfile {
             return archerfile
         } else {
@@ -73,8 +97,10 @@ public struct Archery {
     }
 }
 
-private func prepareMetadata<T>(_ metadata: T) throws -> String {
-    guard let wrapped = try String(data: wrap(metadata), encoding: .utf8) else {
+private func prepareMetadata<T: Encodable>(_ metadata: T) throws -> String {
+    let encoder = JSONEncoder()
+    let wrappedData = try encoder.encode(metadata)
+    guard let wrapped = String(data: wrappedData, encoding: .utf8) else {
         throw ArcheryError.couldNotPrepareMetadata
     }
     return wrapped.replacingOccurrences(of: "\\/", with: "/")

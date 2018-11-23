@@ -3,6 +3,7 @@
 ## 0.3.0
 
 * Mint will not be bundled with Archery anymore. Instead always your global version will be used.
+* Initial implementation for Archerfile loaders.
 
 ## 0.2.1
 
