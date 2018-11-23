@@ -19,9 +19,16 @@ matrix:
       osx_image: xcode9
       env:
         - SWIFT_VERSION=4.1
+    - os: osx
+      osx_image: xcode8
+      env:
+        - SWIFT_VERSION=4.2
     - os: linux
       env:
         - SWIFT_VERSION=4.0
     - os: linux
       env:
         - SWIFT_VERSION=4.1
+    - os: linux
+      env:
+        - SWIFT_VERSION=4.2
