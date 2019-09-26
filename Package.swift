@@ -20,7 +20,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/jakeheis/SwiftCLI.git", from: "5.2.1"),
+        .package(url: "https://github.com/jakeheis/SwiftCLI.git", .exact("5.2.1")),
         .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.1"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "1.0.1"),
     ],
@@ -32,10 +32,18 @@ let package = Package(
             ]
         ),
         .target(
+            name: "ArcherfileDecl",
+            dependencies: [
+                "PathKit",
+                "Yams",
+            ]
+        ),
+        .target(
             name: "ArcheryKit",
             dependencies: [
                 "PathKit",
                 "Yams",
+                "ArcherfileDecl",
                 "MintKitShim",
             ]
         ),

@@ -1,3 +1,4 @@
+import ArcherfileDecl
 import Foundation
 import MintKitShim
 import PathKit
@@ -19,7 +20,7 @@ public struct Archery {
         do {
             let archerfileContents = try (path ?? Path(archerfileName)).read() as String
             var plainArcherfile = try Archerfile(string: archerfileContents)
-            try applyAllArcherfileLoaders(&plainArcherfile)
+            try! applyAllArcherfileLoaders(&plainArcherfile)
             return plainArcherfile
         } catch let error as NSError
             where error.domain == NSCocoaErrorDomain
@@ -28,16 +29,9 @@ public struct Archery {
         }
     }
 
-    public func executeScript(_ script: Script, using archerfile: Archerfile, with arguments: [String] = []) throws {
-        try mint.run(
-            package(for: script),
-            arguments: [
-                Archery.apiLevel,
-                prepareMetadata(archerfile.metadata),
-                prepareMetadata(script.metadata),
-            ] + arguments,
-            verbose: arguments.contains("--verbose")
-        )
+    public func executeScript(_ script: ScriptDecl, using archerfile: Archerfile, with arguments: [String] = []) throws {
+        try ExecutionContext()
+            .run(script, using: archerfile, with: arguments)
     }
 
     public func executeScript(
@@ -46,7 +40,7 @@ public struct Archery {
         with arguments: [String] = []
     ) throws {
         let archerfile = try loadArcherfile(archerfile, with: arguments)
-        guard let script = archerfile.value.scripts[name] else {
+        guard let script = archerfile.scripts?[name] else {
             throw ArcheryError.undefinedScript(name)
         }
         return try executeScript(
@@ -57,27 +51,26 @@ public struct Archery {
     }
 
     private func applyAllArcherfileLoaders(_ archerfile: inout Archerfile) throws {
-        if let loader = archerfile.loaders.first {
-            var newFile = archerfile.dropFirstLoader()
-            try applyArcherfileLoader(loader, using: &newFile)
-            archerfile = newFile
-            try applyAllArcherfileLoaders(&archerfile)
+        while let loader = archerfile.removeFirstLoader() {
+            try applyArcherfileLoader(loader, using: &archerfile)
         }
     }
 
-    private func applyArcherfileLoader(_ loader: Loader, using archerfile: inout Archerfile) throws {
-        let result = try mint.capture(
-            package(for: loader),
-            arguments: [
-                Archery.apiLevel,
-                prepareMetadata(archerfile.metadata),
-                prepareMetadata(loader.metadata),
-            ],
-            verbose: false,
-            silent: true
-        )
-        let additions = try Metadata(string: result.stdout)
-        archerfile = try archerfile.loading(additions)
+    private func applyArcherfileLoader(_ loader: ScriptDecl, using archerfile: inout Archerfile) throws {
+        try ExecutionContext(silent: true)
+            .load(loader, into: &archerfile)
+        /* let result = try mint.capture(
+         package(for: loader),
+         arguments: [
+         Archery.apiLevel,
+         prepareMetadata(archerfile.metadata),
+         prepareMetadata(loader.metadata),
+         ],
+         verbose: false,
+         silent: true
+         )
+         let additions = try Metadata(string: result.stdout)
+         archerfile = try archerfile.loading(additions) */
     }
 
     private func loadArcherfile(_ archerfile: Archerfile?, with _: [String]) throws -> Archerfile {
@@ -86,14 +79,6 @@ public struct Archery {
         } else {
             return try loadArcherfile(from: Path(archerfileName))
         }
-    }
-
-    private func package(for script: Script) -> MintKit.Package {
-        return Package(
-            repo: script.arrow,
-            version: script.version ?? "master",
-            name: script.arrow.split(separator: "/").last.map(String.init) ?? script.arrow
-        )
     }
 }
 

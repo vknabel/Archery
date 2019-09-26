@@ -2,55 +2,57 @@ name: Archery
 version: 0.1.1
 apiLevel: 1
 repository: https://github.com/vknabel/Archery
+loaders:
+  - 'echo {"scripts": {"dump": "echo ARCHERY_METADATA \$ARCHERY_METADATA"}}'
 contributors:
-- github: vknabel
-  email: dev@vknabel.com
-  name: Valentin Knabel
-  twitter: vknabel
+  - github: vknabel
+    email: dev@vknabel.com
+    name: Valentin Knabel
+    twitter: vknabel
 publicArrows:
-- name: Archery
-  repository: vknabel/ArcheryArrow
-  description: Runs multiple scripts.
-  useCases:
-  - Automate complex actions by reusing small building blocks
-  - Combine all steps for a new release into one command
-  - Enforce code style and code format in a pre-commit hook
-- name: Bash
-  repository: vknabel/BashArrow
-  description: Run bash scripts.
-  useCases:
-  - 'Write custom arrows in other languages using the `"nestedArrow": true`'
-  - Generate your docs using jazzy
-- name: Beak
-  repository: vknabel/BeakArrow
-  description: Run functions inside Swift files.
-  project: yonaskolb/Beak
-  useCases:
-  - Great to keep related programs together
-  - Automate your project
-  - 'Write custom arrows in Swift using `"nestedArrow": true`'
-- name: Stencil
-  repository: vknabel/StencilArrow
-  description: Render your metadata.
-  project: kylef/Stencil
-  useCases:
-  - Keep your versions up-to-date
-  - Generate your Podfile
-  - Create new models or classes
-- name: Marathon
-  repository: vknabel/MarathonArrow
-  description: Run Swift scripts.
-  project: JohnSundell/Marathon
-  useCases:
-  - 'Write arrows that are specific to your project with `"nestedArrow": true`'
-  - Automate your project
-- name: Mint
-  repository: vknabel/MintArrow
-  description: Run CLIs written in Swift. Internally used for all arrows.
-  project: yonaskolb/Mint
-  useCases:
-  - Run Swiftlint, SwiftFormat and other scripts
-  - Install local dependencies when needed
+  - name: Archery
+    repository: vknabel/ArcheryArrow
+    description: Runs multiple scripts.
+    useCases:
+      - Automate complex actions by reusing small building blocks
+      - Combine all steps for a new release into one command
+      - Enforce code style and code format in a pre-commit hook
+  - name: Bash
+    repository: vknabel/BashArrow
+    description: Run bash scripts.
+    useCases:
+      - 'Write custom arrows in other languages using the `"nestedArrow": true`'
+      - Generate your docs using jazzy
+  - name: Beak
+    repository: vknabel/BeakArrow
+    description: Run functions inside Swift files.
+    project: yonaskolb/Beak
+    useCases:
+      - Great to keep related programs together
+      - Automate your project
+      - 'Write custom arrows in Swift using `"nestedArrow": true`'
+  - name: Stencil
+    repository: vknabel/StencilArrow
+    description: Render your metadata.
+    project: kylef/Stencil
+    useCases:
+      - Keep your versions up-to-date
+      - Generate your Podfile
+      - Create new models or classes
+  - name: Marathon
+    repository: vknabel/MarathonArrow
+    description: Run Swift scripts.
+    project: JohnSundell/Marathon
+    useCases:
+      - 'Write arrows that are specific to your project with `"nestedArrow": true`'
+      - Automate your project
+  - name: Mint
+    repository: vknabel/MintArrow
+    description: Run CLIs written in Swift. Internally used for all arrows.
+    project: yonaskolb/Mint
+    useCases:
+      - Run Swiftlint, SwiftFormat and other scripts
+      - Install local dependencies when needed
 scripts:
   greet: echo Hello
   clean:
@@ -74,47 +76,47 @@ scripts:
   generate:
     arrow: vknabel/ArcheryArrow
     run:
-    - readme
-    - version
-    - init-command
-    - linux-main
-    - format
-    - docs
+      - readme
+      - version
+      - init-command
+      - linux-main
+      - format
+      - docs
     scripts:
       readme:
         arrow: vknabel/StencilArrow
         template: README.md.stencil
         destination: README.md
         searchPaths:
-        - Scripts
+          - Scripts
       version:
         arrow: vknabel/StencilArrow
         template: Version.swift.stencil
         destination: Sources/ArcheryKit/Version.generated.swift
         searchPaths:
-        - Scripts
+          - Scripts
       init-command:
         arrow: vknabel/StencilArrow
         template: InitCommand+Contents.swift.stencil
         destination: Sources/ArcheryInterface/InitCommand+Contents.swift
         searchPaths:
-        - Scripts
+          - Scripts
       docs: |
-          if which jazzy >/dev/null; then
-            jazzy
-          else
-            echo Skip: Jazzy not available
-          fi
+        if which jazzy >/dev/null; then
+          jazzy
+        else
+          echo Skip: Jazzy not available
+        fi
       linux-main:
         arrow: vknabel/MintArrow
         package: krzysztofzablocki/Sourcery
         packageVersion: 0.10.1
         arguments:
-        - "--sources"
-        - Tests/
-        - "--templates"
-        - Scripts/LinuxMain.swift.stencil
-        - "--args"
-        - |-
-          testimports='@testable import ArcheryKitTests
-          @testable import ArcheryInterfaceTests'
+          - "--sources"
+          - Tests/
+          - "--templates"
+          - Scripts/LinuxMain.swift.stencil
+          - "--args"
+          - |-
+            testimports='@testable import ArcheryKitTests
+            @testable import ArcheryInterfaceTests'

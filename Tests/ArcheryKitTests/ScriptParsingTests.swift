@@ -5,6 +5,7 @@
 //  Created by Valentin Knabel on 25.01.18.
 //
 
+import ArcherfileDecl
 @testable import ArcheryKit
 import XCTest
 

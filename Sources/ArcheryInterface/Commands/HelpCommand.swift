@@ -27,12 +27,12 @@ struct HelpCommand: Command {
         do {
             let archery = Archery()
             let file = try archery.loadArcherfile()
-            return (file, file.value.scripts.map {
+            return (file, file.scripts?.map({
                 Subcommand(
                     name: $0.0,
-                    hint: $0.1.value.help
+                    hint: $0.1.help
                 )
-            }.sorted(by: { $0.name < $1.name }))
+            }).sorted(by: { $0.name < $1.name }) ?? [])
         } catch ArcheryError.noArcherfileFound {
             return (try Archerfile(metadata: .dictionary([:])), [
                 Subcommand(

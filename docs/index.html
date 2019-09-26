@@ -34,31 +34,26 @@
             
             <h1 id='archery' class='heading'>🏹 Archery</h1>
 
+<p><a href="https://gitter.im/vknabel-Archery/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/vknabel-Archery/Lobby.svg" alt="Join the chat at https://gitter.im/vknabel-Archery/Lobby"></a></p>
+
 <p><em>Archery</em> allows you to declare all your project&rsquo;s metadata and what you can do with it in one single place.</p>
 
-<p>Within Archery all your data is centralized as JSON in one file called <code>Archerfile</code>. The whole content of that file is treated as metadata. Within <code>scripts</code> you declare whatever you want to run.</p>
+<p>Within Archery all your data is centralized as YAML in one file called <code>Archerfile</code>, which will be passed to arrows as JSON. The whole content of that file is treated as metadata. Within <code>scripts</code> you declare whatever you want to run.</p>
 
 <p>The following code shows how an Archerfile may look like. Besides the name and version of the project, it declares two scripts:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YourProject"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"help"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Thanks for downloading this project and trying it out."</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"xcproj"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"arrow"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vknabel/BashArrow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"help"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Generate the Xcode Project for the current SPM project"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swift package generate-xcodeproj"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="s2">"generate-version"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"arrow"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vknabel/StencilArrow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"help"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Injects the current version into the SPM project"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Version.swift.stencil"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"destination"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sources/ArcheryKit/Version.generated.swift"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"searchPaths"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Scripts"</span><span class="p">]</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
+<pre class="highlight yaml"><code><span class="na">name</span><span class="pi">:</span> <span class="s">YourProject</span>
+<span class="na">help</span><span class="pi">:</span> <span class="s">Thanks for downloading this project and trying it out.</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s">1.0.0</span>
+<span class="na">scripts</span><span class="pi">:</span>
+  <span class="na">xcproj</span><span class="pi">:</span> <span class="s">swift package generate-xcodeproj</span>
+  <span class="na">generate-version</span><span class="pi">:</span>
+    <span class="na">arrow</span><span class="pi">:</span> <span class="s">vknabel/StencilArrow</span>
+    <span class="na">help</span><span class="pi">:</span> <span class="s">Injects the current version into the SPM project</span>
+    <span class="na">template</span><span class="pi">:</span> <span class="s">Version.swift.stencil</span>
+    <span class="na">destination</span><span class="pi">:</span> <span class="s">Sources/ArcheryKit/Version.generated.swift</span>
+    <span class="na">searchPaths</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Scripts</span><span class="pi">]</span>
+
+</code></pre>
 
 <ul>
 <li><code>$ archery xcproj</code> will use <a href="https://github.com/yonaskolb/Mint">Mint</a> to load <a href="https://github.com/vknabel/BashArrow">vknabel/BashArrow</a>, which executes a given command. Whenever you want to run simple scripts on the command line which do not require global installs, this is an universal way to go.</li>
@@ -201,9 +196,6 @@ Available Commands:
 <h3 id='archerfile-loaders' class='heading'>Archerfile Loaders</h3>
 
 <p>In bigger projects the <code>Archerfile</code> may get huge when used regularly. Later it shall be possible to extract some JSON values into external files and even other scripts. As the <code>Archerfile</code> should not be read directly, this update won’t break arrows.</p>
-<h3 id='yaml-file-format' class='heading'>YAML file format</h3>
-
-<p>Especially if your <code>Archerfile</code> contains descriptions it will get hard to read soon. As a better format we will replace JSON with YAML, which is a superset of JSON and hence won’t break your configs. As the <code>Archerfile</code> should not be read directly, this update won’t break arrows.</p>
 <h2 id='contributors' class='heading'>Contributors</h2>
 
 <ul>
@@ -216,8 +208,8 @@ Available Commands:
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-03-08)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-09-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

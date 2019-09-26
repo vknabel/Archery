@@ -1,3 +1,5 @@
+import Foundation
+
 public enum Metadata: Codable, Equatable {
     case boolean(Bool)
     case string(String)
@@ -47,7 +49,7 @@ public enum Metadata: Codable, Equatable {
 }
 
 public extension Metadata {
-    public func asJSON() -> Any? {
+    func asJSON() -> Any? {
         switch self {
         case let .dictionary(dict):
             return dict.mapValues { $0.asJSON() }
@@ -64,7 +66,7 @@ public extension Metadata {
         }
     }
 
-    public func asJSONDictionary() -> [String: Any]? {
+    func asJSONDictionary() -> [String: Any]? {
         guard case let .dictionary(dict) = self else {
             return nil
         }
@@ -76,12 +78,23 @@ public extension Metadata {
 }
 
 public extension Metadata {
-    public func overriding(using right: Metadata) -> Metadata {
+    func appending(using right: Metadata) -> Metadata {
         switch (self, right) {
         case let (.array(l), .array(r)):
             return .array(l + r)
         case let (.dictionary(l), .dictionary(r)):
-            return .dictionary(l.merging(r, uniquingKeysWith: { lhs, rhs in lhs.overriding(using: rhs) }))
+            return .dictionary(l.merging(r, uniquingKeysWith: { lhs, rhs in lhs.appending(using: rhs) }))
+        case _:
+            return right
+        }
+    }
+
+    func replacing(using right: Metadata) -> Metadata {
+        switch (self, right) {
+        case let (.array(_), .array(r)):
+            return .array(r)
+        case let (.dictionary(l), .dictionary(r)):
+            return .dictionary(l.merging(r, uniquingKeysWith: { _, rhs in rhs }))
         case _:
             return right
         }
@@ -89,14 +102,14 @@ public extension Metadata {
 }
 
 public extension Metadata {
-    public subscript(_ key: String) -> Metadata? {
+    subscript(_ key: String) -> Metadata? {
         guard case let .dictionary(dict) = self else {
             return nil
         }
         return dict[key]
     }
 
-    public subscript(_ index: Int) -> Metadata? {
+    subscript(_ index: Int) -> Metadata? {
         guard case let .array(dict) = self else {
             return nil
         }
@@ -105,7 +118,7 @@ public extension Metadata {
 }
 
 public extension Metadata {
-    public init(json: Any) {
+    init(json: Any) {
         if let value = json as? Metadata {
             self = value
         } else if let value = json as? String {
@@ -127,24 +140,5 @@ public extension Metadata {
         } else {
             self = .null
         }
-    }
-}
-
-import Yams
-
-public extension Metadata {
-    public init(string: String) throws {
-        self = try Yams.YAMLDecoder().decode(Metadata.self, from: string)
-    }
-}
-
-import Foundation
-
-extension Annotated where V == Metadata {
-    public init(metadata: Metadata) throws {
-        let encoder = JSONEncoder()
-        let decoder = JSONDecoder()
-        let archerfile = try decoder.decode(V.self, from: encoder.encode(metadata))
-        self.init(value: archerfile, by: metadata)
     }
 }

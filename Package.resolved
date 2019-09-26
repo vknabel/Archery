@@ -21,7 +21,7 @@
       },
       {
         "package": "SwiftCLI",
-        "repositoryURL": "https://github.com/jakeheis/SwiftCLI",
+        "repositoryURL": "https://github.com/jakeheis/SwiftCLI.git",
         "state": {
           "branch": null,
           "revision": "fb076cba39c679da4e27813518d8860d8815a25b",
