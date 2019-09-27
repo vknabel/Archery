@@ -108,15 +108,10 @@ scripts:
           echo Skip: Jazzy not available
         fi
       linux-main:
-        arrow: vknabel/MintArrow
-        package: krzysztofzablocki/Sourcery
-        packageVersion: 0.10.1
-        arguments:
-          - "--sources"
-          - Tests/
-          - "--templates"
-          - Scripts/LinuxMain.swift.stencil
-          - "--args"
-          - |-
-            testimports='@testable import ArcheryKitTests
-            @testable import ArcheryInterfaceTests'
+        env:
+          SWIFT_VERSION: 3.1
+        command: |
+          mint run krzysztofzablocki/Sourcery@0.10.1 Sourcery \
+            --sources Tests/ \
+            --templates Scripts/LinuxMain.swift.stencil \
+            --args "testimports='@testable import ArcheryKitTests\n@testable import ArcheryInterfaceTests'"

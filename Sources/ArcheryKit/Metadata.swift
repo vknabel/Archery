@@ -30,20 +30,20 @@ public enum Metadata: Codable, Equatable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
         switch self {
         case let .array(value):
-            try container.encode(value)
+            try value.encode(to: encoder)
         case let .dictionary(value):
-            try container.encode(value)
+            try value.encode(to: encoder)
         case let .number(value):
+            var container = encoder.singleValueContainer()
             try container.encode(value)
         case let .string(value):
-            try container.encode(value)
+            try value.encode(to: encoder)
         case let .boolean(value):
-            try container.encode(value)
+            try value.encode(to: encoder)
         case .null:
-            try container.encodeNil()
+            try Optional<String>.none.encode(to: encoder)
         }
     }
 }

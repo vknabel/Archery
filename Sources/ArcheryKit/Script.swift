@@ -1,12 +1,12 @@
-public struct ScriptDecl: Codable, OfferingMetadata {
-    public var execution: ScriptExecutionDecl
+public struct Script: Codable, OfferingMetadata {
+    public var execution: ScriptExecution
     public var help: String?
     public var env: [String: String]?
 
     public var metadata: Metadata
 
     public init(from decoder: Decoder) throws {
-        execution = try ScriptExecutionDecl(from: decoder)
+        execution = try ScriptExecution(from: decoder)
 
         let details = try? ExecutionDetailsSyntax(from: decoder)
         help = details?.help

@@ -1,28 +1,15 @@
-//
-//  ArcherfileParsing.swift
-//  ArcheryInterfaceTests
-//
-//  Created by Valentin Knabel on 25.01.18.
-//
-
 @testable import ArcheryKit
 import XCTest
 
-class ArcherfileParsing: XCTestCase {
+class ArcherfileParsingTests: XCTestCase {
     private func parseArcherfile(from metadata: [String: Any]) throws -> Archerfile {
         let sut = try Archerfile(metadata: Metadata(json: metadata))
-        let serializationOptions = [.prettyPrinted] as JSONSerialization.WritingOptions
-        XCTAssertEqual(
-            try? String(data: JSONSerialization.data(withJSONObject: sut.metadata.asJSON()!, options: serializationOptions), encoding: .utf8),
-            try? String(data: JSONSerialization.data(withJSONObject: metadata, options: serializationOptions), encoding: .utf8),
-            "Metadata does not loose data"
-        )
         return sut
     }
 
     func testArcherfileParsingFromMinimalFile() throws {
         let sut = try parseArcherfile(from: [:])
-        XCTAssertEqual(sut.value.scripts.count, 0)
+        XCTAssertEqual(sut.scripts.count, 0)
     }
 
     func testArcherfileParsingFromEmptyScripts() throws {
@@ -61,8 +48,8 @@ class ArcherfileParsing: XCTestCase {
                 ],
             ],
         ])
-        XCTAssertEqual(sut.scripts["some"]?.arrow, "my/Arrow")
-        XCTAssertEqual(sut.scripts["other"]?.arrow, "your/Arrow")
+        XCTAssertEqual(sut.scripts["some"]?.execution.legacy?.arrow, "my/Arrow")
+        XCTAssertEqual(sut.scripts["other"]?.execution.legacy?.arrow, "your/Arrow")
     }
 
     func testArcherfileParsingFromSomeScriptsAndShorthand() throws {
@@ -74,8 +61,8 @@ class ArcherfileParsing: XCTestCase {
                 "other": "your/Arrow",
             ],
         ])
-        XCTAssertEqual(sut.scripts["some"]?.arrow, "my/Arrow")
-        XCTAssertEqual(sut.scripts["other"]?.arrow, "your/Arrow")
+        XCTAssertEqual(sut.scripts["some"]?.execution.legacy?.arrow, "my/Arrow")
+        XCTAssertEqual(sut.scripts["other"]?.execution.legacy?.arrow, "your/Arrow")
     }
 
     func testArcherfileParsingFromSomeLoadersAndShorthand() throws {
@@ -87,8 +74,8 @@ class ArcherfileParsing: XCTestCase {
                 "your/Arrow",
             ],
         ])
-        XCTAssertEqual(sut.loaders[0].arrow, "my/Arrow")
-        XCTAssertEqual(sut.loaders[1].arrow, "your/Arrow")
+        XCTAssertEqual(sut.loaders[0].execution.legacy?.arrow, "my/Arrow")
+        XCTAssertEqual(sut.loaders[1].execution.legacy?.arrow, "your/Arrow")
     }
 
     func testArcherfileParsingFromSomeLoadersAndBashShorthand() throws {
@@ -97,7 +84,6 @@ class ArcherfileParsing: XCTestCase {
                 "cat Metadata/*.yml",
             ],
         ])
-        XCTAssertEqual(sut.loaders[0].arrow, "vknabel/BashArrow")
-        XCTAssertEqual(sut.loaders[0].command, "cat Metadata/*.yml")
+        XCTAssertEqual(sut.loaders[0].execution.bashCommand, "cat Metadata/*.yml")
     }
 }

@@ -1,11 +1,3 @@
-//
-//  Metadata.swift
-//  ArcheryKitTests
-//
-//  Created by Valentin Knabel on 21.11.18.
-//
-
-import ArcherfileDecl
 import ArcheryKit
 import XCTest
 

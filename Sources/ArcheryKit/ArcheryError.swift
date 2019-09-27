@@ -1,4 +1,9 @@
+import Foundation
+
 public enum ArcheryError: Error, CustomStringConvertible {
+    case unsupportedScriptSyntax(codingPath: [CodingKey])
+    case executionFailed(label: [String], status: Int32)
+
     case undefinedScript(String)
     case couldNotPrepareMetadata
     case invalidContentsOfArcherfile
@@ -7,6 +12,8 @@ public enum ArcheryError: Error, CustomStringConvertible {
 
     public var description: String {
         switch self {
+        case let .unsupportedScriptSyntax(codingPath: path):
+            return "Unsupported script syntax at \(path)"
         case .invalidContentsOfArcherfile:
             return "Invalid contents of Archerfile"
         case let .undefinedScript(name):
@@ -17,6 +24,8 @@ public enum ArcheryError: Error, CustomStringConvertible {
             return "Invalid script defintion \(definition)"
         case .noArcherfileFound:
             return "No Archerfile found"
+        case let .executionFailed(label: label, status: status):
+            return "\(label.joined(separator: " > ")) exited with \(status)"
         }
     }
 }
