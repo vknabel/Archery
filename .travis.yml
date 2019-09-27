@@ -24,7 +24,7 @@ matrix:
       env:
         - SWIFT_VERSION=4.2
     - os: osx
-      osx_image: xcode11
+      osx_image: xcode10
       env:
         - SWIFT_VERSION=5.0
     - os: osx

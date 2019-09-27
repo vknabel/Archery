@@ -1,6 +1,5 @@
 import ArcheryKit
 import Foundation
-import protocol SwiftCLI.ProcessError
 
 public struct ArcheryInterface {
     public let archery: Archery
@@ -18,12 +17,14 @@ public struct ArcheryInterface {
             exit(1)
         } catch let error as ArcheryError {
             print("💥  \(error)")
-            exit(1)
+            if case let .executionFailed(label: _, status: status) = error {
+                exit(status)
+            } else {
+                exit(1)
+            }
         } catch let error as NSError where error.domain == NSCocoaErrorDomain {
             print("💥  \(error.localizedDescription)")
             exit(1)
-        } catch let error as ProcessError {
-            exit(Int32(error.exitStatus))
         } catch {
             print("💥  \(error)")
             exit(1)
