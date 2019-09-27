@@ -25,9 +25,7 @@ struct ExecutionContext {
                 print("🏹  Running \(label.joined(separator: " > "))")
             }
 
-            process.launch()
-            process.waitUntilExit()
-
+            try process.runAndWait()
             if process.terminationStatus != 0 {
                 throw ArcheryError.executionFailed(label: label, status: process.terminationStatus)
             }
@@ -45,9 +43,7 @@ struct ExecutionContext {
             process.standardOutput = outputPipe
             process.standardError = errorPipe
 
-            process.launch()
-            process.waitUntilExit()
-
+            try process.runAndWait()
             if process.terminationStatus != 0 {
                 throw ArcheryError.executionFailed(label: label, status: process.terminationStatus)
             }
@@ -129,4 +125,15 @@ struct ExecutionContext {
 
 private func combineArguments(_ arguments: [String]...) -> [String] {
     return arguments.flatMap { $0 }
+}
+
+private extension Process {
+    func runAndWait() throws {
+        if #available(macOS 10.13, *) {
+            try run()
+        } else {
+            launch()
+        }
+        waitUntilExit()
+    }
 }

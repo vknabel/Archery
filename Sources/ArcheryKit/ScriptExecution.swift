@@ -95,6 +95,6 @@ private extension ScriptExecution {
 
 private extension String {
     var isLegacyLiteral: Bool {
-        !contains(" ") && !starts(with: ".") && split(separator: "/").count == 2
+        return !contains(" ") && !starts(with: ".") && split(separator: "/").count == 2
     }
 }
