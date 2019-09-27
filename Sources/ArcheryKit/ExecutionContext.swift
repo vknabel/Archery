@@ -21,6 +21,10 @@ struct ExecutionContext {
     func run(_ script: LabeledScript, using archerfile: Archerfile, with arguments: [String]) throws {
         let processes = try makeProcesses(script, using: archerfile, with: arguments, parentScripts: [:])
         for (label, process) in processes {
+            if !silent {
+                print("🏹  Running \(label.joined(separator: " > "))")
+            }
+
             process.launch()
             process.waitUntilExit()
 
@@ -65,13 +69,14 @@ struct ExecutionContext {
             let encoder = JSONEncoder()
             let legacyArguments = [
                 "1",
-                String(data: try encoder.encode(archerfile), encoding: .utf8) ?? "{}", // TODO: legacy format
-                String(data: try encoder.encode(labeled.script), encoding: .utf8) ?? "{}", // TODO: legacy format
+                String(data: try encoder.encode(archerfile.legacyMetadata()), encoding: .utf8) ?? "{}",
+                String(data: try encoder.encode(labeled.script.legacyMetadata()), encoding: .utf8) ?? "{}",
             ]
             let nestedArrowArguments = nested ?? false ? legacyArguments : []
             let silenceArguments = silent ? ["--silent"] : []
             let legacyEnvironment = [
-                "ARCHERY_API_LEVEL": "1", // fake old API level
+                // fake the old API level
+                "ARCHERY_API_LEVEL": "1",
                 "ARCHERY_LEGACY_MINT_PATH": "mint",
             ]
             let versionedArrow = version.map({ "\(arrow)@\($0)" }) ?? arrow

@@ -6,7 +6,7 @@ struct InitCommand: Command {
         do {
             let archery = Archery()
             try archery.executeScript(named: "init")
-        } catch ArcheryError.noArcherfileFound {
+        } catch ArcheryError.archerfileNotFound {
             let destination = try createNewArcherfile()
             print("🏹  Created at \(destination)")
         }

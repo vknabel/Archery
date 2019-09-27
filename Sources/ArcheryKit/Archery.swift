@@ -17,7 +17,7 @@ public struct Archery {
         } catch let error as NSError
             where error.domain == NSCocoaErrorDomain
             && error.code == NSFileReadNoSuchFileError {
-            throw ArcheryError.noArcherfileFound
+            throw ArcheryError.archerfileNotFound
         }
     }
 
@@ -27,8 +27,8 @@ public struct Archery {
         with arguments: [String] = []
     ) throws {
         let archerfile = try loadArcherfile(archerfile, with: arguments)
-        guard let script = archerfile.scripts[name]?.labeled(by: [name]) else {
-            throw ArcheryError.undefinedScript(name)
+        guard let script = archerfile.scripts[name]?.labeled(by: ["scripts", name]) else {
+            throw ArcheryError.scriptNotFound(name: name, label: ["scripts"])
         }
         return try execute(
             script: script,
@@ -63,13 +63,4 @@ public struct Archery {
             return try loadArcherfile(from: Path(archerfileName))
         }
     }
-}
-
-private func prepareMetadata<T: Encodable>(_ metadata: T) throws -> String {
-    let encoder = JSONEncoder()
-    let wrappedData = try encoder.encode(metadata)
-    guard let wrapped = String(data: wrappedData, encoding: .utf8) else {
-        throw ArcheryError.couldNotPrepareMetadata
-    }
-    return wrapped.replacingOccurrences(of: "\\/", with: "/")
 }

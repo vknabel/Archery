@@ -33,7 +33,7 @@ struct HelpCommand: Command {
                     hint: $0.1.help
                 )
             }.sorted(by: { $0.name < $1.name }))
-        } catch ArcheryError.noArcherfileFound {
+        } catch ArcheryError.archerfileNotFound {
             return (try Archerfile(metadata: .dictionary([:])), [
                 Subcommand(
                     name: "init",

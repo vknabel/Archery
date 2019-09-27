@@ -1,0 +1,44 @@
+publicArrows:
+  - name: Archery
+    repository: vknabel/ArcheryArrow
+    description: Runs multiple scripts.
+    useCases:
+      - Automate complex actions by reusing small building blocks
+      - Combine all steps for a new release into one command
+      - Enforce code style and code format in a pre-commit hook
+  - name: Bash
+    repository: vknabel/BashArrow
+    description: Run bash scripts.
+    useCases:
+      - 'Write custom arrows in other languages using the `"nestedArrow": true`'
+      - Generate your docs using jazzy
+  - name: Beak
+    repository: vknabel/BeakArrow
+    description: Run functions inside Swift files.
+    project: yonaskolb/Beak
+    useCases:
+      - Great to keep related programs together
+      - Automate your project
+      - 'Write custom arrows in Swift using `"nestedArrow": true`'
+  - name: Stencil
+    repository: vknabel/StencilArrow
+    description: Render your metadata.
+    project: kylef/Stencil
+    useCases:
+      - Keep your versions up-to-date
+      - Generate your Podfile
+      - Create new models or classes
+  - name: Marathon
+    repository: vknabel/MarathonArrow
+    description: Run Swift scripts.
+    project: JohnSundell/Marathon
+    useCases:
+      - 'Write arrows that are specific to your project with `"nestedArrow": true`'
+      - Automate your project
+  - name: Mint
+    repository: vknabel/MintArrow
+    description: Run CLIs written in Swift. Internally used for all arrows.
+    project: yonaskolb/Mint
+    useCases:
+      - Run Swiftlint, SwiftFormat and other scripts
+      - Install local dependencies when needed
