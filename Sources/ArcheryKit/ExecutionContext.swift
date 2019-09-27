@@ -127,13 +127,13 @@ struct ExecutionContext {
         ]
 
         let process = Process()
-        #if swift(>=5.1)
+        if #available(macOS 10.13, *) {
             process.executableURL = URL(fileURLWithPath: launchPath ?? settings.defaultLaunchPath)
             process.currentDirectoryURL = URL(fileURLWithPath: workingDirectory ?? settings.defaultWorkingDirectory)
-        #else
+        } else {
             process.launchPath = launchPath ?? settings.defaultLaunchPath
             process.currentDirectoryPath = workingDirectory ?? settings.defaultWorkingDirectory
-        #endif
+        }
 
         process.environment = ProcessInfo.processInfo.environment
             .merging(archeryEnv, uniquingKeysWith: { $1 })
@@ -149,11 +149,11 @@ private func combineArguments(_ arguments: [String]...) -> [String] {
 
 private extension Process {
     func runAndWait() throws {
-        #if swift(>=5.1)
+        if #available(OSX 10.13, *) {
             try run()
-        #else
+        } else {
             launch()
-        #endif
+        }
         waitUntilExit()
     }
 }
