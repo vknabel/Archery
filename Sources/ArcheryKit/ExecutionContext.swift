@@ -11,12 +11,26 @@ struct Settings {
 }
 
 struct ExecutionContext {
-    var settings = Settings()
+    var settings: Settings
 
     var silent: Bool = false
     var env: [String: String] = [:]
     var launchPath: String?
     var workingDirectory: String?
+
+    init(
+        settings: Settings = Settings(),
+        silent: Bool = false,
+        env: [String: String] = [:],
+        launchPath: String? = nil,
+        workingDirectory: String? = nil
+    ) {
+        self.settings = settings
+        self.silent = silent
+        self.env = env
+        self.launchPath = launchPath
+        self.workingDirectory = workingDirectory
+    }
 
     func run(_ script: LabeledScript, using archerfile: Archerfile, with arguments: [String]) throws {
         let processes = try makeProcesses(script, using: archerfile, with: arguments, parentScripts: [:])
@@ -113,8 +127,14 @@ struct ExecutionContext {
         ]
 
         let process = Process()
-        process.launchPath = launchPath ?? settings.defaultLaunchPath
-        process.currentDirectoryPath = workingDirectory ?? settings.defaultWorkingDirectory
+        if #available(macOS 10.13, *) {
+            process.executableURL = URL(fileURLWithPath: launchPath ?? settings.defaultLaunchPath)
+            process.currentDirectoryURL = URL(fileURLWithPath: workingDirectory ?? settings.defaultWorkingDirectory)
+        } else {
+            process.launchPath = launchPath ?? settings.defaultLaunchPath
+            process.currentDirectoryPath = workingDirectory ?? settings.defaultWorkingDirectory
+        }
+
         process.environment = ProcessInfo.processInfo.environment
             .merging(archeryEnv, uniquingKeysWith: { $1 })
             .merging(env, uniquingKeysWith: { $1 })
