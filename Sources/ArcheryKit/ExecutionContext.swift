@@ -130,6 +130,7 @@ struct ExecutionContext {
     private func makeBaseProcess(for script: Script, using archerfile: Archerfile) throws -> Process {
         let encoder = JSONEncoder()
         let archeryEnv: [String: String] = [
+            "ARCHERY": CommandLine.arguments[0],
             "ARCHERY_API_LEVEL": "2",
             "ARCHERY_METADATA": String(data: try encoder.encode(archerfile), encoding: .utf8) ?? "{}",
             "ARCHERY_SCRIPT": String(data: try encoder.encode(script), encoding: .utf8) ?? "{}",

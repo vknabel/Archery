@@ -43,15 +43,23 @@ public struct Archery {
     }
 
     private func applyAllArcherfileLoaders(_ archerfile: inout Archerfile, with arguments: [String]) throws {
-        for i in 0... {
+        for index in 0... {
             guard let loader = archerfile.removeFirstLoader() else {
                 return
             }
-            try applyArcherfileLoader(loader.labeled(by: ["loaders", "step \(i)"]), using: &archerfile, with: arguments)
+            try applyArcherfileLoader(
+                loader.labeled(by: ["loaders", "step \(index)"]),
+                using: &archerfile,
+                with: arguments
+            )
         }
     }
 
-    private func applyArcherfileLoader(_ loader: LabeledScript, using archerfile: inout Archerfile, with arguments: [String]) throws {
+    private func applyArcherfileLoader(
+        _ loader: LabeledScript,
+        using archerfile: inout Archerfile,
+        with arguments: [String]
+    ) throws {
         try ExecutionContext(silent: true)
             .load(loader, into: &archerfile, with: arguments)
     }
