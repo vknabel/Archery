@@ -36,7 +36,7 @@ struct ExecutionContext {
         let processes = try makeProcesses(script, using: archerfile, with: arguments, parentScripts: [:])
         for (label, process) in processes {
             if !silent {
-                print("🏹  Running \(label.joined(separator: " > "))")
+                print("🏹  Running \(label.joined(separator: " ▶︎ "))")
             }
 
             try process.runAndWait()
@@ -93,7 +93,6 @@ struct ExecutionContext {
 
             let process = try makeBaseProcess(for: labeled.script, using: archerfile)
             process.environment?.merge(legacyEnvironment, uniquingKeysWith: { $1 })
-            process.launchPath = "/usr/bin/env"
             process.arguments = combineArguments(
                 [settings.legacyMintPath, "run"],
                 silenceArguments,
@@ -149,11 +148,7 @@ private func combineArguments(_ arguments: [String]...) -> [String] {
 
 private extension Process {
     func runAndWait() throws {
-        if #available(OSX 10.13, *) {
-            try run()
-        } else {
-            launch()
-        }
+        try ProcessScheduler.run(self)
         waitUntilExit()
     }
 }

@@ -13,7 +13,7 @@ public struct Script: Codable, OfferingMetadata {
         env = details?.env
 
         metadata = try Metadata(from: decoder)
-            .appending(using: execution.metadata)
+            .replacing(using: execution.metadata)
     }
 
     public func encode(to encoder: Encoder) throws {

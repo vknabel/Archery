@@ -23,9 +23,9 @@ public enum ScriptExecution: Decodable {
             self = .bash(command: object.command)
         } else if let literal = try? QueueLiteralSyntax(from: decoder) {
             self = .queue(
-                run: literal.enumerated().map { "\($0.offset)" },
+                run: literal.enumerated().map { "step \($0.offset)" },
                 scripts: Dictionary(
-                    literal.enumerated().map({ ("\($0.offset)", $0.element) }),
+                    literal.enumerated().map({ ("step \($0.offset)", $0.element) }),
                     uniquingKeysWith: { $1 }
                 )
             )

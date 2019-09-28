@@ -23,6 +23,18 @@ scripts:
     arrow: vknabel/MintArrow
     help: Lints all project files
     package: Realm/Swiftlint
+  test:
+    run: [host, swift5.0, swift5.1]
+    scripts:
+      host: swift test
+      swift5.0:
+        - docker create --rm --name archery5.0 --workdir /archery swift:5.0 swift test
+        - docker cp . archery5.0:/archery
+        - docker start --attach archery5.0
+      swift5.1:
+        - docker create --rm --name archery5.1 --workdir /archery swift:5.1 swift test
+        - docker cp . archery5.1:/archery
+        - docker start --attach archery5.1
   generate:
     arrow: vknabel/ArcheryArrow
     run:

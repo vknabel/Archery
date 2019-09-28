@@ -47,7 +47,7 @@ public struct Archery {
             guard let loader = archerfile.removeFirstLoader() else {
                 return
             }
-            try applyArcherfileLoader(loader.labeled(by: ["loaders", "\(i)"]), using: &archerfile)
+            try applyArcherfileLoader(loader.labeled(by: ["loaders", "step \(i)"]), using: &archerfile)
         }
     }
 
