@@ -108,9 +108,9 @@ struct ExecutionContext {
             )
             return [(labeled.label, process)]
         case let .queue(run: runOrder, scripts: localScripts):
-            let orderedScripts = runOrder.map { name -> LabeledScript in
+            let orderedScripts = try runOrder.map { name -> LabeledScript in
                 guard let match = localScripts[name] ?? parentScripts[name] ?? archerfile.scripts[name] else {
-                    fatalError("Throw not found error and tell which scripts are known")
+                    throw ArcheryError.scriptNotFound(name: name, label: labeled.label)
                 }
                 return match.labeled(by: labeled.label + [name])
             }
