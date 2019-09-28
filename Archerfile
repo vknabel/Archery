@@ -3,8 +3,8 @@ version: 0.2.0
 apiLevel: 2
 repository: https://github.com/vknabel/Archery
 loaders:
-  - cat Metadata/contributors.yml
-  - cat Metadata/arrows.yml
+  - cat Metadata/*.yml
+  - swift Scripts/MapSwiftTargetsToScripts.swift --package-path .
 scripts:
   greet: echo Hello
   clean:
