@@ -3,6 +3,7 @@ import ArcheryKit
 struct HelpCommand: Command {
     let prefix = "    "
     let padding = "  "
+
     func run() throws {
         let (archerfile, allSubcommands) = try context()
         if let help = archerfile.metadata["help"]?.asJSON() as? String {
@@ -26,7 +27,7 @@ struct HelpCommand: Command {
     func context() throws -> (Archerfile, [Subcommand]) {
         do {
             let archery = Archery()
-            let file = try archery.loadArcherfile()
+            let file = try archery.loadArcherfile(with: ["help"])
             return (file, file.scripts.map {
                 Subcommand(
                     name: $0.0,

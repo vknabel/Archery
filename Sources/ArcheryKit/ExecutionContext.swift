@@ -46,9 +46,9 @@ struct ExecutionContext {
         }
     }
 
-    func load(_ script: LabeledScript, into archerfile: inout Archerfile) throws {
+    func load(_ script: LabeledScript, into archerfile: inout Archerfile, with arguments: [String]) throws {
         // Queue loaders will be executed using the same archerfile definition!
-        let processes = try makeProcesses(script, using: archerfile, with: [], parentScripts: [:])
+        let processes = try makeProcesses(script, using: archerfile, with: arguments, parentScripts: [:])
         for (label, process) in processes {
             let inputPipe = FileHandle.nullDevice
             let outputPipe = Pipe()
@@ -68,11 +68,16 @@ struct ExecutionContext {
         }
     }
 
-    private func makeProcesses(_ labeled: LabeledScript, using archerfile: Archerfile, with arguments: [String], parentScripts: [String: Script]) throws -> [(label: [String], process: Process)] {
+    private func makeProcesses(
+        _ labeled: LabeledScript,
+        using archerfile: Archerfile,
+        with arguments: [String],
+        parentScripts: [String: Script]
+    ) throws -> [(label: [String], process: Process)] {
         switch labeled.script.execution {
         case let .bash(command: cmd):
             let process = try makeBaseProcess(for: labeled.script, using: archerfile)
-            process.arguments = ["bash", "-c", cmd]
+            process.arguments = ["bash", "-c", cmd, targetWorkingDirectory(for: labeled.script)] + arguments
             return [(labeled.label, process)]
         case let .legacy(arrow: arrow, version: version, nestedArrow: nested):
             let packageName = arrow.split(separator: "/").last.map(String.init) ?? arrow
@@ -87,7 +92,7 @@ struct ExecutionContext {
             let legacyEnvironment = [
                 // fake the old API level
                 "ARCHERY_API_LEVEL": "1",
-                "ARCHERY_LEGACY_MINT_PATH": "mint",
+                "ARCHERY_LEGACY_MINT_PATH": settings.legacyMintPath,
             ]
             let versionedArrow = version.map({ "\(arrow)@\($0)" }) ?? arrow
 
@@ -112,7 +117,12 @@ struct ExecutionContext {
             let combinedScripts = parentScripts.merging(localScripts, uniquingKeysWith: { _, local in local })
             return try orderedScripts.flatMap { namedScript -> [(label: [String], process: Process)] in
                 let (label, current) = namedScript
-                return try makeProcesses(current.labeled(by: label), using: archerfile, with: arguments, parentScripts: combinedScripts)
+                return try makeProcesses(
+                    current.labeled(by: label),
+                    using: archerfile,
+                    with: arguments,
+                    parentScripts: combinedScripts
+                )
             }
         }
     }
@@ -128,10 +138,10 @@ struct ExecutionContext {
         let process = Process()
         if #available(macOS 10.13, *) {
             process.executableURL = URL(fileURLWithPath: launchPath ?? settings.defaultLaunchPath)
-            process.currentDirectoryURL = URL(fileURLWithPath: workingDirectory ?? settings.defaultWorkingDirectory)
+            process.currentDirectoryURL = URL(fileURLWithPath: targetWorkingDirectory(for: script))
         } else {
             process.launchPath = launchPath ?? settings.defaultLaunchPath
-            process.currentDirectoryPath = workingDirectory ?? settings.defaultWorkingDirectory
+            process.currentDirectoryPath = targetWorkingDirectory(for: script)
         }
 
         process.environment = ProcessInfo.processInfo.environment
@@ -139,6 +149,12 @@ struct ExecutionContext {
             .merging(env, uniquingKeysWith: { $1 })
             .merging(script.env ?? [:], uniquingKeysWith: { $1 })
         return process
+    }
+
+    private func targetWorkingDirectory(for script: Script) -> String {
+        return script.workingDirectory
+            ?? workingDirectory
+            ?? settings.defaultWorkingDirectory
     }
 }
 

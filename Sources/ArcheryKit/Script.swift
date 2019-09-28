@@ -2,6 +2,7 @@ public struct Script: Codable, OfferingMetadata {
     public var execution: ScriptExecution
     public var help: String?
     public var env: [String: String]?
+    public var workingDirectory: String?
 
     public var metadata: Metadata
 
