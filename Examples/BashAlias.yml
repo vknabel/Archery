@@ -1,0 +1,15 @@
+scripts:
+  alias:
+    help: |-
+      Generates bash aliases for all scripts.
+      eval $(archery alias)
+    silent: true
+    command: |-
+      echo '
+      const scripts = JSON.parse(process.env.ARCHERY_METADATA).scripts;
+      Object.keys(scripts)
+        .filter(name => name !== "alias")
+        .forEach(name => {
+          const command = `${process.env.ARCHERY} ${name}`;
+          console.log(`function ${name}() { ${command} "$@"; }`);
+        });' | node

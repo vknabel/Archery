@@ -48,5 +48,9 @@ let package = try decoder.decode(PackageDump.self, from: output.fileHandleForRea
 
 print("scripts:")
 for product in package.products where product.isExecutable {
-    print("  \(product.name): 'swift run --package-path \(packagePath) \(product.name) $@'")
+    print("""
+      \(product.name):
+        command: 'swift run --package-path \(packagePath) \(product.name) $@'
+        help: 'Runs \(product.name) using the swift package manager'
+    """)
 }

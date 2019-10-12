@@ -3,6 +3,7 @@ public struct Script: Codable, OfferingMetadata {
     public var help: String?
     public var env: [String: String]?
     public var workingDirectory: String?
+    public var silent: Bool?
 
     public var metadata: Metadata
 
@@ -12,6 +13,7 @@ public struct Script: Codable, OfferingMetadata {
         let details = try? ExecutionDetailsSyntax(from: decoder)
         help = details?.help
         env = details?.env
+        silent = details?.silent
 
         metadata = try Metadata(from: decoder)
             .replacing(using: execution.metadata)
@@ -24,5 +26,6 @@ public struct Script: Codable, OfferingMetadata {
     private struct ExecutionDetailsSyntax: Codable {
         var help: String?
         var env: [String: String]?
+        var silent: Bool?
     }
 }

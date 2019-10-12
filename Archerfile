@@ -4,13 +4,12 @@ apiLevel: 2
 repository: https://github.com/vknabel/Archery
 loaders:
   - cat Metadata/*.yml
+  - cat Examples/BashAlias.yml
+  - cat Examples/TestingOnMultiplePlatforms.yml
   - swift Scripts/MapSwiftTargetsToScripts.swift --package-path .
 scripts:
   greet: echo Hello
-  clean:
-    arrow: vknabel/BashArrow
-    command: rm -rf .archery && swift package clean
-    printCommandBeforeExecution: true
+  clean: rm -rf .archery && swift package clean
   xcopen: swift package generate-xcodeproj --enable-code-coverage && open *.xcodeproj
   format:
     arrow: vknabel/BashArrow
@@ -23,27 +22,7 @@ scripts:
     arrow: vknabel/MintArrow
     help: Lints all project files
     package: Realm/Swiftlint
-  test:
-    help: Runs tests on your current host system, but also on supported linux versions
-    run: [host, swift5.0, swift5.1]
-    scripts:
-      host: swift test
-      swift5.0:
-        env:
-          SWIFT_VERSION: 5.0
-        command: |-
-          export CONTAINER=$(docker create --rm --workdir /archery swift:$SWIFT_VERSION swift test)
-          docker cp . $CONTAINER:/archery
-          docker start --attach $CONTAINER
-      swift5.1:
-        env:
-          SWIFT_VERSION: 5.1
-        command: |-
-          export CONTAINER=$(docker create --rm --workdir /archery swift:$SWIFT_VERSION swift test)
-          docker cp . $CONTAINER:/archery
-          docker start --attach $CONTAINER
   generate:
-    arrow: vknabel/ArcheryArrow
     run:
       - readme
       - version

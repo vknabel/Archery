@@ -35,7 +35,7 @@ struct ExecutionContext {
     func run(_ script: LabeledScript, using archerfile: Archerfile, with arguments: [String]) throws {
         let processes = try makeProcesses(script, using: archerfile, with: arguments, parentScripts: [:])
         for (label, process) in processes {
-            if !silent {
+            if !silent && !arguments.contains("--silent") && !(script.script.silent ?? false) {
                 print("🏹  Running \(label.joined(separator: " ▶︎ "))")
             }
 
