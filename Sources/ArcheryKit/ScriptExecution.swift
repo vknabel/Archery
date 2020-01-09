@@ -25,7 +25,7 @@ public enum ScriptExecution: Decodable {
             self = .queue(
                 run: literal.enumerated().map { "step \($0.offset)" },
                 scripts: Dictionary(
-                    literal.enumerated().map({ ("step \($0.offset)", $0.element) }),
+                    literal.enumerated().map { ("step \($0.offset)", $0.element) },
                     uniquingKeysWith: { $1 }
                 )
             )

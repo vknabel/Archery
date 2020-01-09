@@ -35,7 +35,7 @@ struct ExecutionContext {
     func run(_ script: LabeledScript, using archerfile: Archerfile, with arguments: [String]) throws {
         let processes = try makeProcesses(script, using: archerfile, with: arguments, parentScripts: [:])
         for (label, process) in processes {
-            if !silent && !arguments.contains("--silent") && !(script.script.silent ?? false) {
+            if !silent, !arguments.contains("--silent"), !(script.script.silent ?? false) {
                 print("🏹  Running \(label.joined(separator: " ▶︎ "))")
             }
 
@@ -94,7 +94,7 @@ struct ExecutionContext {
                 "ARCHERY_API_LEVEL": "1",
                 "ARCHERY_LEGACY_MINT_PATH": settings.legacyMintPath,
             ]
-            let versionedArrow = version.map({ "\(arrow)@\($0)" }) ?? arrow
+            let versionedArrow = version.map { "\(arrow)@\($0)" } ?? arrow
 
             let process = try makeBaseProcess(for: labeled.script, using: archerfile)
             process.environment?.merge(legacyEnvironment, uniquingKeysWith: { $1 })

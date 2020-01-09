@@ -71,7 +71,7 @@ public extension Metadata {
             return nil
         }
         let entries = dict.compactMap { pair in
-            return pair.value.asJSON().map { value in (pair.key, value) }
+            pair.value.asJSON().map { value in (pair.key, value) }
         }
         return Dictionary(entries, uniquingKeysWith: { $1 })
     }

@@ -51,7 +51,7 @@ scripts:
           - Scripts
       docs: |
         if which jazzy >/dev/null; then
-          jazzy
+          jazzy --head "$(cat Scripts/docs-head.html)"
         else
           echo Skip: Jazzy not available
         fi
