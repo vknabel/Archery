@@ -1,7 +1,9 @@
 included:
-    - Sources
-    - Package.swift
-    - Tests
-    - Scripts
+  - Sources
+  - Package.swift
+  - Tests
+  - Scripts
+excluded:
+  - Tests/*/XCTestManifests.swift
 disabled_rules:
-    - trailing_comma
+  - trailing_comma

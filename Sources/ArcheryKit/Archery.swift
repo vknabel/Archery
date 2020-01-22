@@ -3,14 +3,23 @@ import PathKit
 
 public struct Archery {
     private let archerfileName: String
+    private let environment: [String: String]
 
-    public init(archerfileName: String = "Archerfile") {
+    public init(
+        archerfileName: String = "Archerfile",
+        environment: [String: String] = ProcessInfo.processInfo.environment
+    ) {
         self.archerfileName = archerfileName
+        self.environment = environment
     }
 
-    public func loadArcherfile(from path: Path? = nil, with arguments: [String]) throws -> Archerfile {
+    public func loadArcherfile(
+        from path: Path? = nil,
+        with arguments: [String]
+    ) throws -> Archerfile {
         do {
-            let archerfileContents = try (path ?? Path(archerfileName)).read() as String
+            let archerfileContents = try environment["ARCHERY_METADATA"]
+                ?? (path ?? Path(archerfileName)).read() as String
             var plainArcherfile = try Archerfile(string: archerfileContents)
             try applyAllArcherfileLoaders(&plainArcherfile, with: arguments)
             return plainArcherfile
@@ -64,7 +73,10 @@ public struct Archery {
             .load(loader, into: &archerfile, with: arguments)
     }
 
-    private func loadArcherfile(_ archerfile: Archerfile?, with arguments: [String]) throws -> Archerfile {
+    private func loadArcherfile(
+        _ archerfile: Archerfile?,
+        with arguments: [String]
+    ) throws -> Archerfile {
         if let archerfile = archerfile {
             return archerfile
         } else {

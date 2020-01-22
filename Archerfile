@@ -1,23 +1,23 @@
 name: Archery
-version: 0.2.0
+version: 0.3.1
 apiLevel: 2
 repository: https://github.com/vknabel/Archery
 loaders:
   - cat Metadata/*.yml
   - cat Examples/BashAlias.yml
   - cat Examples/TestingOnMultiplePlatforms.yml
+  - cat Examples/LoadUserSpecificOverrides.yml
   - swift Scripts/MapSwiftTargetsToScripts.swift --package-path .
 scripts:
   greet: echo Hello
   clean: rm -rf .archery && swift package clean
   xcopen: swift package generate-xcodeproj --enable-code-coverage && open *.xcodeproj
   format:
-    arrow: vknabel/BashArrow
     help: |-
       Reformats all Swift code. Requires swiftformat to be installed globally.
       See https://github.com/nicklockwood/SwiftFormat/pull/183
     comment: Requires https://github.com/nicklockwood/SwiftFormat/pull/183
-    command: swiftformat .
+    command: swiftformat --exclude "Sources/ArcheryInterface/InitCommand+Contents.swift" .
   lint:
     arrow: vknabel/MintArrow
     help: Lints all project files

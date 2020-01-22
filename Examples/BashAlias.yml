@@ -13,3 +13,17 @@ scripts:
           const command = `${process.env.ARCHERY} ${name}`;
           console.log(`function ${name}() { ${command} "$@"; }`);
         });' | node
+  unalias:
+    help: |-
+      Frees bash aliases for all scripts.
+      eval $(archery unalias)
+    silent: true
+    command: |-
+      echo '
+      const scripts = JSON.parse(process.env.ARCHERY_METADATA).scripts;
+      Object.keys(scripts)
+        .filter(name => name !== "alias")
+        .forEach(name => {
+          const command = `${process.env.ARCHERY} ${name}`;
+          console.log(`unset ${name}`);
+        });' | node

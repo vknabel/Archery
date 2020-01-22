@@ -1,0 +1,9 @@
+loaders:
+  # Archerfile.override is in .gitignore
+  # will be loaded when existing
+  - |-
+    if [ -f "Archerfile.override" ]; then
+      cat Archerfile.override
+    else
+      echo "{}"
+    fi

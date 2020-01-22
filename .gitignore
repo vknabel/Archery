@@ -9,3 +9,6 @@
 /build
 /docs/undocumented.json
 default.profraw
+
+# for Examples/LoadUserSpecificOverrides.yml
+Archerfile.override

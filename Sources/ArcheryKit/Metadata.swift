@@ -43,7 +43,7 @@ public enum Metadata: Codable, Equatable {
         case let .boolean(value):
             try value.encode(to: encoder)
         case .null:
-            try Optional<String>.none.encode(to: encoder)
+            try String?.none.encode(to: encoder)
         }
     }
 }
@@ -80,10 +80,10 @@ public extension Metadata {
 public extension Metadata {
     func appending(using right: Metadata) -> Metadata {
         switch (self, right) {
-        case let (.array(l), .array(r)):
-            return .array(l + r)
-        case let (.dictionary(l), .dictionary(r)):
-            return .dictionary(l.merging(r, uniquingKeysWith: { lhs, rhs in lhs.appending(using: rhs) }))
+        case let (.array(lhs), .array(rhs)):
+            return .array(lhs + rhs)
+        case let (.dictionary(lhs), .dictionary(rhs)):
+            return .dictionary(lhs.merging(rhs, uniquingKeysWith: { first, second in first.appending(using: second) }))
         case _:
             return right
         }
@@ -91,10 +91,10 @@ public extension Metadata {
 
     func replacing(using right: Metadata) -> Metadata {
         switch (self, right) {
-        case let (.array(_), .array(r)):
-            return .array(r)
-        case let (.dictionary(l), .dictionary(r)):
-            return .dictionary(l.merging(r, uniquingKeysWith: { _, rhs in rhs }))
+        case let (.array(_), .array(rhs)):
+            return .array(rhs)
+        case let (.dictionary(lhs), .dictionary(rhs)):
+            return .dictionary(lhs.merging(rhs, uniquingKeysWith: { _, second in second }))
         case _:
             return right
         }

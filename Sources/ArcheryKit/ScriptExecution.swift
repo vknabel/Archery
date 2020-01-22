@@ -8,9 +8,16 @@ public enum ScriptExecution: Decodable {
         case let .bash(command: command):
             return .dictionary(["command": .string(command)])
         case let .queue(run: run, scripts: scripts):
-            return .dictionary(["run": .array(run.map(Metadata.string)), "scripts": .dictionary(scripts.mapValues { $0.metadata })])
+            return .dictionary([
+                "run": .array(run.map(Metadata.string)),
+                "scripts": .dictionary(scripts.mapValues { $0.metadata }),
+            ])
         case let .legacy(arrow: arrow, version: version, nestedArrow: nestedArrow):
-            return .dictionary(["arrow": .string(arrow), "version": version.map(Metadata.string) ?? Metadata.null, "nestedArrow": nestedArrow.map(Metadata.boolean) ?? Metadata.null])
+            return .dictionary([
+                "arrow": .string(arrow),
+                "version": version.map(Metadata.string) ?? Metadata.null,
+                "nestedArrow": nestedArrow.map(Metadata.boolean) ?? Metadata.null,
+            ])
         }
     }
 

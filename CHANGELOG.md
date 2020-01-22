@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1
+
+-   **[Improvement]** Nested `$ARCHERY` invocations will now prefer `$ARCHERY_METADATA` instead of parsing the Archerfile again
+-   **[Improvement]** Modernized the Archerfile contents created by the `init` command
+
 ## 0.3.0
 
 -   **[Breaking]** Mint will not be bundled with Archery anymore and needs to be installed manually when using legacy Arrows.
@@ -11,7 +16,7 @@
 -   **[Improvement]** Scripts can now be run in sequence without using `arrow: vknabel/ArcheryArrow`
 -   **[Improvement]** Bash scripts do not require `arrow: vknabel/BashArrow` anymore.
 -   **[Improvement]** `vknabel/BashArrow` implicitly uses the new scripting API and does not require compilation anymore.
-- **[Deprecation]** The classical `arrow`-script type will be deprecated and will be removed in far future.
+-   **[Deprecation]** The classical `arrow`-script type will be deprecated and will be removed in far future.
 
 ### Upcoming Breaking Changes
 
