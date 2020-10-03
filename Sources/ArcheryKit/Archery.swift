@@ -1,5 +1,4 @@
 import Foundation
-import PathKit
 
 public struct Archery {
     private let archerfileName: String

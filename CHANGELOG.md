@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2
+
+-   **[Improvement]** Updated Yams
+-   **[Improvement]** Removed PathKit
+
 ## 0.3.1
 
 -   **[Improvement]** Nested `$ARCHERY` invocations will now prefer `$ARCHERY_METADATA` instead of parsing the Archerfile again
