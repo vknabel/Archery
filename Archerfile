@@ -1,5 +1,5 @@
 name: Archery
-version: 0.3.1
+version: 0.3.2
 apiLevel: 2
 repository: https://github.com/vknabel/Archery
 loaders:

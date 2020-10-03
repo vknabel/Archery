@@ -1,5 +1,5 @@
 import ArcheryKit
-import PathKit
+import Foundation
 
 struct InitCommand: Command {
     func run() throws {
