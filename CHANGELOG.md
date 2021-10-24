@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+-   **[Improvement]** Updated Yams
+
 ## 0.3.2
 
 -   **[Improvement]** Updated Yams
