@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.3
 
 -   **[Improvement]** Updated Yams
 -   **[Improvement]** Updated to Swift 5.4
