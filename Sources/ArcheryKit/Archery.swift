@@ -24,7 +24,8 @@ public struct Archery {
             return plainArcherfile
         } catch let error as NSError
             where error.domain == NSCocoaErrorDomain
-            && error.code == NSFileReadNoSuchFileError {
+            && error.code == NSFileReadNoSuchFileError
+        {
             throw ArcheryError.archerfileNotFound
         }
     }

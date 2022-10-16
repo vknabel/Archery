@@ -3,6 +3,7 @@
 ## Unreleased
 
 -   **[Improvement]** Updated Yams
+-   **[Improvement]** Updated to Swift 5.4
 
 ## 0.3.2
 

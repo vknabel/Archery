@@ -11,7 +11,6 @@ loaders:
 scripts:
   greet: echo Hello
   clean: rm -rf .archery && swift package clean
-  xcopen: swift package generate-xcodeproj --enable-code-coverage && open *.xcodeproj
   format:
     help: |-
       Reformats all Swift code. Requires swiftformat to be installed globally.
@@ -27,7 +26,6 @@ scripts:
       - readme
       - version
       - init-command
-      - linux-main
       - format
       - docs
     scripts:
@@ -55,4 +53,3 @@ scripts:
         else
           echo Skip: Jazzy not available
         fi
-      linux-main: swift test --generate-linuxmain

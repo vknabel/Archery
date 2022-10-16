@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.4
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -20,10 +20,10 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.6"),
+        .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.1"),
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "Archery",
             dependencies: [
                 "ArcheryInterface",
